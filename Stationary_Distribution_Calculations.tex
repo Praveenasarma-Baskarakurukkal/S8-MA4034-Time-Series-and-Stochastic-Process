@@ -1,0 +1,1125 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumitem}
+\usepackage{booktabs}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\newtheoremstyle{notestyle}
+  {8pt}
+  {8pt}
+  {\normalfont}
+  {}
+  {\bfseries}
+  {.}
+  {0.5em}
+  {}
+
+\theoremstyle{notestyle}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+
+\newenvironment{answer}
+{\par\textbf{Answer.}\ }
+{\hfill$\square$\par}
+
+\title{\textbf{Supplementary Practice: Stationary Distribution Calculations}}
+\author{MA4034: Time Series and Stochastic Processes}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Main Idea}
+
+For a Markov chain with transition matrix $P$, a stationary distribution is a probability vector
+\[
+\pi=(\pi_0,\pi_1,\ldots)
+\]
+such that
+\[
+\pi P=\pi,
+\]
+where
+\[
+\pi_i\geq 0
+\qquad\text{and}\qquad
+\sum_i \pi_i=1.
+\]
+
+The equation
+\[
+\pi P=\pi
+\]
+means that if the chain starts with distribution $\pi$, then after one step the distribution is still $\pi$.
+
+\textbf{Interpretation.} In an ergodic Markov chain, the stationary distribution gives the long-run proportion of time spent in each state.
+
+\section{How to Prove Whether a Stationary Distribution Exists}
+
+When a question asks whether a Markov chain has a stationary distribution, use the following steps.
+
+\subsection*{Case 1: Finite State Space}
+
+If the Markov chain has a finite number of states, a stationary distribution always exists.
+
+However, it may or may not be unique.
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item If the finite chain is irreducible, then the stationary distribution exists and is unique.
+    \item If the finite chain is not irreducible, then a stationary distribution still exists, but it may not be unique.
+\end{itemize}
+
+\textbf{Steps for a finite chain:}
+
+\begin{enumerate}[leftmargin=1.2cm]
+    \item Write
+    \[
+    \pi=(\pi_0,\pi_1,\ldots,\pi_m).
+    \]
+    \item Solve
+    \[
+    \pi P=\pi.
+    \]
+    \item Add the probability condition
+    \[
+    \pi_0+\pi_1+\cdots+\pi_m=1.
+    \]
+    \item Check that all probabilities are non-negative:
+    \[
+    \pi_i\geq 0.
+    \]
+    \item If one valid probability vector is obtained, then a stationary distribution exists.
+\end{enumerate}
+
+\subsection*{Case 2: Infinite State Space}
+
+For an infinite state space, a stationary distribution may or may not exist. We must be more careful.
+
+\textbf{Steps for an infinite chain:}
+
+\begin{enumerate}[leftmargin=1.2cm]
+    \item Write
+    \[
+    \pi=(\pi_0,\pi_1,\pi_2,\ldots).
+    \]
+    \item Solve the equation
+    \[
+    \pi P=\pi
+    \]
+    to express $\pi_1,\pi_2,\ldots$ in terms of $\pi_0$.
+    \item Use the probability condition
+    \[
+    \sum_{i=0}^{\infty}\pi_i=1.
+    \]
+    \item Check whether the infinite series converges.
+    \item If the series converges and all $\pi_i\geq 0$, then a stationary distribution exists.
+    \item If the series diverges, then no stationary distribution exists.
+\end{enumerate}
+
+\subsection*{Case 3: Using Irreducibility and Recurrence}
+
+For an irreducible Markov chain:
+
+\[
+\boxed{
+\text{A stationary distribution exists if and only if the chain is positive recurrent.}
+}
+\]
+
+So for an irreducible chain:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item If the chain is positive recurrent, then a unique stationary distribution exists.
+    \item If the chain is null recurrent or transient, then no stationary distribution exists.
+\end{itemize}
+
+\subsection*{Case 4: If a Candidate Distribution is Given}
+
+If the question gives a vector and asks whether it is stationary:
+
+\begin{enumerate}[leftmargin=1.2cm]
+    \item Check whether all entries are non-negative.
+    \item Check whether the entries sum to 1.
+    \item Compute
+    \[
+    \pi P.
+    \]
+    \item If
+    \[
+    \pi P=\pi,
+    \]
+    then $\pi$ is stationary.
+    \item If
+    \[
+    \pi P\neq \pi,
+    \]
+    then $\pi$ is not stationary.
+\end{enumerate}
+
+\subsection*{Common Exam Mistake}
+
+Do not stop after solving
+\[
+\pi P=\pi.
+\]
+You must also check
+\[
+\sum_i\pi_i=1
+\]
+and
+\[
+\pi_i\geq 0.
+\]
+
+A vector can satisfy the algebraic equation but still fail to be a probability distribution.
+
+\subsection*{Quick Decision Table}
+
+\[
+\begin{array}{c|c}
+\text{Situation} & \text{Conclusion}\\
+\hline
+\text{Finite and irreducible} & \text{unique stationary distribution exists}\\
+\text{Finite but reducible} & \text{stationary distribution exists, may not be unique}\\
+\text{Infinite and irreducible positive recurrent} & \text{unique stationary distribution exists}\\
+\text{Infinite and irreducible null recurrent} & \text{no stationary distribution}\\
+\text{Infinite and irreducible transient} & \text{no stationary distribution}\\
+\text{Candidate }\pi\text{ given} & \text{check }\pi_i\geq0,\ \sum_i\pi_i=1,\ \pi P=\pi
+\end{array}
+\]
+
+\section{Worked Calculation 1: Two-State Chain}
+
+\begin{example}
+Consider a Markov chain with transition matrix
+\[
+P=
+\begin{pmatrix}
+0.7 & 0.3\\
+0.4 & 0.6
+\end{pmatrix}.
+\]
+Find the stationary distribution.
+\end{example}
+
+\begin{answer}
+Let
+\[
+\pi=(\pi_0,\pi_1).
+\]
+We solve
+\[
+\pi P=\pi
+\]
+and
+\[
+\pi_0+\pi_1=1.
+\]
+
+Now,
+\[
+(\pi_0,\pi_1)
+\begin{pmatrix}
+0.7 & 0.3\\
+0.4 & 0.6
+\end{pmatrix}
+=
+(\pi_0,\pi_1).
+\]
+
+Equating the first component:
+\[
+0.7\pi_0+0.4\pi_1=\pi_0.
+\]
+Rearrange:
+\[
+0.4\pi_1=0.3\pi_0.
+\]
+Therefore,
+\[
+\pi_1=\frac{0.3}{0.4}\pi_0=\frac34\pi_0.
+\]
+
+Using the probability condition,
+\[
+\pi_0+\pi_1=1,
+\]
+we get
+\[
+\pi_0+\frac34\pi_0=1.
+\]
+Thus,
+\[
+\frac74\pi_0=1,
+\]
+so
+\[
+\pi_0=\frac47.
+\]
+Then
+\[
+\pi_1=\frac34\cdot\frac47=\frac37.
+\]
+
+Therefore the stationary distribution is
+\[
+\boxed{\pi=\left(\frac47,\frac37\right).}
+\]
+\end{answer}
+
+\section{Worked Calculation 2: Weather Chain}
+
+\begin{example}
+Suppose the weather is classified as sunny $(S)$ or rainy $(R)$. A sunny day is followed by a sunny day with probability $0.8$, and a rainy day is followed by a sunny day with probability $0.5$.
+
+Using the state order $(S,R)$, find the stationary distribution.
+\end{example}
+
+\begin{answer}
+First construct the transition matrix.
+
+If today is sunny:
+\[
+\Prob(S\to S)=0.8,
+\qquad
+\Prob(S\to R)=0.2.
+\]
+
+If today is rainy:
+\[
+\Prob(R\to S)=0.5,
+\qquad
+\Prob(R\to R)=0.5.
+\]
+
+Therefore,
+\[
+P=
+\begin{pmatrix}
+0.8 & 0.2\\
+0.5 & 0.5
+\end{pmatrix}.
+\]
+
+Let
+\[
+\pi=(\pi_S,\pi_R).
+\]
+We solve
+\[
+\pi P=\pi
+\]
+and
+\[
+\pi_S+\pi_R=1.
+\]
+
+The first component gives
+\[
+0.8\pi_S+0.5\pi_R=\pi_S.
+\]
+Rearrange:
+\[
+0.5\pi_R=0.2\pi_S.
+\]
+So
+\[
+\pi_R=\frac{0.2}{0.5}\pi_S=\frac25\pi_S.
+\]
+
+Using
+\[
+\pi_S+\pi_R=1,
+\]
+we get
+\[
+\pi_S+\frac25\pi_S=1.
+\]
+Thus,
+\[
+\frac75\pi_S=1,
+\]
+so
+\[
+\pi_S=\frac57.
+\]
+Then
+\[
+\pi_R=\frac27.
+\]
+
+Therefore,
+\[
+\boxed{\pi=\left(\frac57,\frac27\right).}
+\]
+
+Interpretation: in the long run, about $\frac57$ of days are sunny and $\frac27$ of days are rainy.
+\end{answer}
+
+\section{Worked Calculation 3: Three-State Chain}
+
+\begin{example}
+Consider a Markov chain with state space
+\[
+S=\{0,1,2\}
+\]
+and transition matrix
+\[
+P=
+\begin{pmatrix}
+0.5 & 0.5 & 0\\
+0.2 & 0.5 & 0.3\\
+0 & 0.4 & 0.6
+\end{pmatrix}.
+\]
+Find the stationary distribution.
+\end{example}
+
+\begin{answer}
+Let
+\[
+\pi=(\pi_0,\pi_1,\pi_2).
+\]
+We solve
+\[
+\pi P=\pi
+\]
+and
+\[
+\pi_0+\pi_1+\pi_2=1.
+\]
+
+Writing out $\pi P=\pi$:
+\[
+0.5\pi_0+0.2\pi_1=\pi_0,
+\]
+\[
+0.5\pi_0+0.5\pi_1+0.4\pi_2=\pi_1,
+\]
+\[
+0.3\pi_1+0.6\pi_2=\pi_2.
+\]
+
+Use the first equation:
+\[
+0.5\pi_0+0.2\pi_1=\pi_0.
+\]
+Then
+\[
+0.2\pi_1=0.5\pi_0,
+\]
+so
+\[
+\pi_1=\frac{0.5}{0.2}\pi_0=\frac52\pi_0.
+\]
+
+Use the third equation:
+\[
+0.3\pi_1+0.6\pi_2=\pi_2.
+\]
+Then
+\[
+0.3\pi_1=0.4\pi_2,
+\]
+so
+\[
+\pi_2=\frac{0.3}{0.4}\pi_1=\frac34\pi_1.
+\]
+
+Substitute $\pi_1=\frac52\pi_0$:
+\[
+\pi_2=\frac34\cdot\frac52\pi_0=\frac{15}{8}\pi_0.
+\]
+
+Now use the sum condition:
+\[
+\pi_0+\pi_1+\pi_2=1.
+\]
+Substitute everything in terms of $\pi_0$:
+\[
+\pi_0+\frac52\pi_0+\frac{15}{8}\pi_0=1.
+\]
+Use denominator 8:
+\[
+\frac88\pi_0+\frac{20}{8}\pi_0+\frac{15}{8}\pi_0=1.
+\]
+Therefore,
+\[
+\frac{43}{8}\pi_0=1.
+\]
+So
+\[
+\pi_0=\frac8{43}.
+\]
+
+Then
+\[
+\pi_1=\frac52\cdot\frac8{43}=\frac{20}{43},
+\]
+and
+\[
+\pi_2=\frac{15}{8}\cdot\frac8{43}=\frac{15}{43}.
+\]
+
+Therefore the stationary distribution is
+\[
+\boxed{
+\pi=\left(\frac8{43},\frac{20}{43},\frac{15}{43}\right).
+}
+\]
+\end{answer}
+
+\section{Practice Questions}
+
+\begin{enumerate}[label=\textbf{Q\arabic*.}, leftmargin=1.2cm]
+    \item Find the stationary distribution of
+    \[
+    P=
+    \begin{pmatrix}
+    0.6 & 0.4\\
+    0.2 & 0.8
+    \end{pmatrix}.
+    \]
+
+    \item A machine has two states: working $(W)$ and broken $(B)$. If it is working today, it remains working tomorrow with probability $0.9$. If it is broken today, it is repaired and working tomorrow with probability $0.6$. Find the long-run proportion of time the machine is working.
+
+    \item Find the stationary distribution of
+    \[
+    P=
+    \begin{pmatrix}
+    0.4 & 0.6 & 0\\
+    0.3 & 0.4 & 0.3\\
+    0 & 0.2 & 0.8
+    \end{pmatrix}.
+    \]
+
+    \item For the chain
+    \[
+    P=
+    \begin{pmatrix}
+    0.7 & 0.3\\
+    0.1 & 0.9
+    \end{pmatrix},
+    \]
+    find the stationary distribution and interpret it in words.
+\end{enumerate}
+
+\section{Answers}
+
+\subsection*{Answer 1}
+
+Let
+\[
+\pi=(\pi_0,\pi_1).
+\]
+Solve
+\[
+\pi P=\pi,
+\qquad
+\pi_0+\pi_1=1.
+\]
+
+From the first component:
+\[
+0.6\pi_0+0.2\pi_1=\pi_0.
+\]
+Thus,
+\[
+0.2\pi_1=0.4\pi_0,
+\]
+so
+\[
+\pi_1=2\pi_0.
+\]
+
+Using
+\[
+\pi_0+\pi_1=1,
+\]
+we get
+\[
+\pi_0+2\pi_0=1.
+\]
+Therefore,
+\[
+\pi_0=\frac13
+\]
+and
+\[
+\pi_1=\frac23.
+\]
+
+Hence,
+\[
+\boxed{\pi=\left(\frac13,\frac23\right).}
+\]
+
+\subsection*{Answer 2}
+
+Use the state order $(W,B)$.
+
+If the machine is working:
+\[
+\Prob(W\to W)=0.9,
+\qquad
+\Prob(W\to B)=0.1.
+\]
+
+If the machine is broken:
+\[
+\Prob(B\to W)=0.6,
+\qquad
+\Prob(B\to B)=0.4.
+\]
+
+Thus,
+\[
+P=
+\begin{pmatrix}
+0.9 & 0.1\\
+0.6 & 0.4
+\end{pmatrix}.
+\]
+
+Let
+\[
+\pi=(\pi_W,\pi_B).
+\]
+From $\pi P=\pi$,
+\[
+0.9\pi_W+0.6\pi_B=\pi_W.
+\]
+Therefore,
+\[
+0.6\pi_B=0.1\pi_W.
+\]
+So
+\[
+\pi_B=\frac{1}{6}\pi_W.
+\]
+
+Using
+\[
+\pi_W+\pi_B=1,
+\]
+we get
+\[
+\pi_W+\frac16\pi_W=1.
+\]
+Thus,
+\[
+\frac76\pi_W=1,
+\]
+so
+\[
+\pi_W=\frac67.
+\]
+
+Therefore the long-run proportion of time the machine is working is
+\[
+\boxed{\frac67\approx 0.8571.}
+\]
+
+\subsection*{Answer 3}
+
+Let
+\[
+\pi=(\pi_0,\pi_1,\pi_2).
+\]
+
+From $\pi P=\pi$:
+\[
+0.4\pi_0+0.3\pi_1=\pi_0,
+\]
+\[
+0.6\pi_0+0.4\pi_1+0.2\pi_2=\pi_1,
+\]
+\[
+0.3\pi_1+0.8\pi_2=\pi_2.
+\]
+
+From the first equation:
+\[
+0.3\pi_1=0.6\pi_0,
+\]
+so
+\[
+\pi_1=2\pi_0.
+\]
+
+From the third equation:
+\[
+0.3\pi_1=0.2\pi_2,
+\]
+so
+\[
+\pi_2=\frac{0.3}{0.2}\pi_1=\frac32\pi_1.
+\]
+Since $\pi_1=2\pi_0$,
+\[
+\pi_2=3\pi_0.
+\]
+
+Use
+\[
+\pi_0+\pi_1+\pi_2=1.
+\]
+Then
+\[
+\pi_0+2\pi_0+3\pi_0=1.
+\]
+So
+\[
+6\pi_0=1,
+\]
+and
+\[
+\pi_0=\frac16.
+\]
+Therefore,
+\[
+\pi_1=\frac13,
+\qquad
+\pi_2=\frac12.
+\]
+
+Hence,
+\[
+\boxed{\pi=\left(\frac16,\frac13,\frac12\right).}
+\]
+
+\subsection*{Answer 4}
+
+Let
+\[
+\pi=(\pi_0,\pi_1).
+\]
+
+From the first component of $\pi P=\pi$:
+\[
+0.7\pi_0+0.1\pi_1=\pi_0.
+\]
+Thus,
+\[
+0.1\pi_1=0.3\pi_0,
+\]
+so
+\[
+\pi_1=3\pi_0.
+\]
+
+Using
+\[
+\pi_0+\pi_1=1,
+\]
+we get
+\[
+\pi_0+3\pi_0=1.
+\]
+Therefore,
+\[
+\pi_0=\frac14,
+\qquad
+\pi_1=\frac34.
+\]
+
+Thus,
+\[
+\boxed{\pi=\left(\frac14,\frac34\right).}
+\]
+
+Interpretation: in the long run, the chain spends one quarter of the time in state 0 and three quarters of the time in state 1.
+
+\section{Checking Whether a Given Distribution is Stationary}
+
+Sometimes the question does not ask us to find the stationary distribution. Instead, it gives a probability vector and asks whether it is stationary.
+
+To check this, use two steps:
+\begin{enumerate}[leftmargin=1.2cm]
+    \item Check whether the vector is a probability distribution:
+    \[
+    \pi_i\geq 0
+    \quad\text{and}\quad
+    \sum_i\pi_i=1.
+    \]
+    \item Check whether
+    \[
+    \pi P=\pi.
+    \]
+\end{enumerate}
+
+If both conditions are true, then $\pi$ is stationary. If either condition fails, then $\pi$ is not stationary.
+
+\begin{example}
+Consider
+\[
+P=
+\begin{pmatrix}
+0.6 & 0.4\\
+0.2 & 0.8
+\end{pmatrix}.
+\]
+Is
+\[
+\pi=\left(\frac13,\frac23\right)
+\]
+a stationary distribution? Give a reason.
+\end{example}
+
+\begin{answer}
+First check that $\pi$ is a probability distribution:
+\[
+\frac13+\frac23=1,
+\]
+and both entries are non-negative.
+
+Now calculate $\pi P$:
+\[
+\pi P
+=
+\left(\frac13,\frac23\right)
+\begin{pmatrix}
+0.6 & 0.4\\
+0.2 & 0.8
+\end{pmatrix}.
+\]
+
+First component:
+\[
+\frac13(0.6)+\frac23(0.2)
+=
+\frac{0.6}{3}+\frac{0.4}{3}
+=
+\frac{1}{3}.
+\]
+
+Second component:
+\[
+\frac13(0.4)+\frac23(0.8)
+=
+\frac{0.4}{3}+\frac{1.6}{3}
+=
+\frac{2}{3}.
+\]
+
+Therefore,
+\[
+\pi P=\left(\frac13,\frac23\right)=\pi.
+\]
+
+Hence,
+\[
+\boxed{\pi=\left(\frac13,\frac23\right)\text{ is stationary.}}
+\]
+\end{answer}
+
+\section{Practice Questions: Is the Given Vector Stationary?}
+
+\begin{enumerate}[label=\textbf{Q\arabic*.}, leftmargin=1.2cm]
+    \item Consider
+    \[
+    P=
+    \begin{pmatrix}
+    0.7 & 0.3\\
+    0.4 & 0.6
+    \end{pmatrix}.
+    \]
+    Is
+    \[
+    \pi=\left(\frac47,\frac37\right)
+    \]
+    a stationary distribution? Give a reason.
+
+    \item Consider
+    \[
+    P=
+    \begin{pmatrix}
+    0.7 & 0.3\\
+    0.4 & 0.6
+    \end{pmatrix}.
+    \]
+    Is
+    \[
+    \pi=\left(\frac12,\frac12\right)
+    \]
+    a stationary distribution? Give a reason.
+
+    \item Consider
+    \[
+    P=
+    \begin{pmatrix}
+    1 & 0 & 0\\
+    \frac14 & \frac12 & \frac14\\
+    0 & 0 & 1
+    \end{pmatrix}.
+    \]
+    Is
+    \[
+    \pi=\left(\frac12,0,\frac12\right)
+    \]
+    a stationary distribution? Give a reason.
+
+    \item For the same matrix
+    \[
+    P=
+    \begin{pmatrix}
+    1 & 0 & 0\\
+    \frac14 & \frac12 & \frac14\\
+    0 & 0 & 1
+    \end{pmatrix},
+    \]
+    is
+    \[
+    \pi=\left(0,\frac12,\frac12\right)
+    \]
+    a stationary distribution? Give a reason.
+
+    \item Consider
+    \[
+    P=
+    \begin{pmatrix}
+    0.5 & 0.5\\
+    0.1 & 0.9
+    \end{pmatrix}.
+    \]
+    Is
+    \[
+    v=(2,-1)
+    \]
+    a stationary distribution? Give a reason.
+\end{enumerate}
+
+\section{Answers: Is the Given Vector Stationary?}
+
+\subsection*{Answer 1}
+
+First,
+\[
+\frac47+\frac37=1,
+\]
+so $\pi$ is a probability distribution.
+
+Now compute:
+\[
+\pi P
+=
+\left(\frac47,\frac37\right)
+\begin{pmatrix}
+0.7 & 0.3\\
+0.4 & 0.6
+\end{pmatrix}.
+\]
+
+First component:
+\[
+\frac47(0.7)+\frac37(0.4)
+=
+\frac47\cdot\frac7{10}+\frac37\cdot\frac4{10}
+=
+\frac25+\frac6{35}
+=
+\frac{14}{35}+\frac6{35}
+=
+\frac{20}{35}
+=
+\frac47.
+\]
+
+Second component:
+\[
+\frac47(0.3)+\frac37(0.6)
+=
+\frac47\cdot\frac3{10}+\frac37\cdot\frac6{10}
+=
+\frac6{35}+\frac9{35}
+=
+\frac{15}{35}
+=
+\frac37.
+\]
+
+Thus,
+\[
+\pi P=\left(\frac47,\frac37\right)=\pi.
+\]
+
+Therefore,
+\[
+\boxed{\pi\text{ is stationary.}}
+\]
+
+\subsection*{Answer 2}
+
+First,
+\[
+\frac12+\frac12=1,
+\]
+so $\pi$ is a probability distribution.
+
+Now compute:
+\[
+\pi P
+=
+\left(\frac12,\frac12\right)
+\begin{pmatrix}
+0.7 & 0.3\\
+0.4 & 0.6
+\end{pmatrix}.
+\]
+
+First component:
+\[
+\frac12(0.7)+\frac12(0.4)
+=0.35+0.20
+=0.55.
+\]
+
+Second component:
+\[
+\frac12(0.3)+\frac12(0.6)
+=0.15+0.30
+=0.45.
+\]
+
+Therefore,
+\[
+\pi P=(0.55,0.45).
+\]
+
+But
+\[
+(0.55,0.45)\neq \left(\frac12,\frac12\right).
+\]
+
+Therefore,
+\[
+\boxed{\pi\text{ is not stationary.}}
+\]
+
+\subsection*{Answer 3}
+
+First,
+\[
+\frac12+0+\frac12=1,
+\]
+so $\pi$ is a probability distribution.
+
+Now compute:
+\[
+\pi P
+=
+\left(\frac12,0,\frac12\right)
+\begin{pmatrix}
+1 & 0 & 0\\
+\frac14 & \frac12 & \frac14\\
+0 & 0 & 1
+\end{pmatrix}.
+\]
+
+First component:
+\[
+\frac12(1)+0\left(\frac14\right)+\frac12(0)=\frac12.
+\]
+
+Second component:
+\[
+\frac12(0)+0\left(\frac12\right)+\frac12(0)=0.
+\]
+
+Third component:
+\[
+\frac12(0)+0\left(\frac14\right)+\frac12(1)=\frac12.
+\]
+
+Thus,
+\[
+\pi P=\left(\frac12,0,\frac12\right)=\pi.
+\]
+
+Therefore,
+\[
+\boxed{\pi\text{ is stationary.}}
+\]
+
+\subsection*{Answer 4}
+
+First,
+\[
+0+\frac12+\frac12=1,
+\]
+so $\pi$ is a probability distribution.
+
+Now compute:
+\[
+\pi P
+=
+\left(0,\frac12,\frac12\right)
+\begin{pmatrix}
+1 & 0 & 0\\
+\frac14 & \frac12 & \frac14\\
+0 & 0 & 1
+\end{pmatrix}.
+\]
+
+First component:
+\[
+0(1)+\frac12\left(\frac14\right)+\frac12(0)=\frac18.
+\]
+
+Second component:
+\[
+0(0)+\frac12\left(\frac12\right)+\frac12(0)=\frac14.
+\]
+
+Third component:
+\[
+0(0)+\frac12\left(\frac14\right)+\frac12(1)=\frac18+\frac12=\frac58.
+\]
+
+Therefore,
+\[
+\pi P=\left(\frac18,\frac14,\frac58\right).
+\]
+
+But
+\[
+\left(\frac18,\frac14,\frac58\right)
+\neq
+\left(0,\frac12,\frac12\right).
+\]
+
+Therefore,
+\[
+\boxed{\pi\text{ is not stationary.}}
+\]
+
+\subsection*{Answer 5}
+
+A stationary distribution must be a probability distribution. That means all entries must be non-negative and must sum to 1.
+
+For
+\[
+v=(2,-1),
+\]
+the second entry is negative:
+\[
+-1<0.
+\]
+
+Although
+\[
+2+(-1)=1,
+\]
+the vector has a negative entry, so it is not a probability distribution.
+
+Therefore it cannot be a stationary distribution.
+
+\[
+\boxed{v\text{ is not stationary.}}
+\]
+
+\end{document}

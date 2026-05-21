@@ -1,0 +1,658 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumitem}
+\usepackage{booktabs}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\newtheoremstyle{notestyle}
+  {8pt}
+  {8pt}
+  {\normalfont}
+  {}
+  {\bfseries}
+  {.}
+  {0.5em}
+  {}
+
+\theoremstyle{notestyle}
+\newtheorem{example}{Example}
+
+\newenvironment{answer}
+{\par\textbf{Answer.}\ }
+{\hfill$\square$\par}
+
+\title{\textbf{Finding the Limiting Distribution Using Eigenvalues}}
+\author{MA4034: Time Series and Stochastic Processes}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Goal}
+
+For the ON/OFF Markov chain,
+\[
+P=
+\begin{pmatrix}
+1-p & p\\
+q & 1-q
+\end{pmatrix},
+\]
+we want to find
+\[
+\lim_{n\to\infty}P^n.
+\]
+
+The states are ordered as
+\[
+(0,1)=(\text{OFF},\text{ON}).
+\]
+
+\section{Step 1: Find the Eigenvalues}
+
+The eigenvalues of $P$ are
+\[
+\lambda_1=1,
+\qquad
+\lambda_2=1-p-q.
+\]
+
+So the diagonal matrix is
+\[
+D=
+\begin{pmatrix}
+1 & 0\\
+0 & 1-p-q
+\end{pmatrix}.
+\]
+
+\section{Step 2: Find the Eigenvectors}
+
+To find eigenvectors, solve
+\[
+(P-\lambda I)v=0.
+\]
+
+Let
+\[
+v=
+\begin{pmatrix}
+x\\
+y
+\end{pmatrix}.
+\]
+
+\subsection{Eigenvector for $\lambda_1=1$}
+
+Solve
+\[
+(P-I)v=0.
+\]
+
+Now
+\[
+P-I
+=
+\begin{pmatrix}
+1-p & p\\
+q & 1-q
+\end{pmatrix}
+-
+\begin{pmatrix}
+1 & 0\\
+0 & 1
+\end{pmatrix}.
+\]
+
+Therefore,
+\[
+P-I
+=
+\begin{pmatrix}
+-p & p\\
+q & -q
+\end{pmatrix}.
+\]
+
+Now solve
+\[
+\begin{pmatrix}
+-p & p\\
+q & -q
+\end{pmatrix}
+\begin{pmatrix}
+x\\
+y
+\end{pmatrix}
+=
+\begin{pmatrix}
+0\\
+0
+\end{pmatrix}.
+\]
+
+The first row gives
+\[
+-px+py=0.
+\]
+
+So
+\[
+p(y-x)=0.
+\]
+
+Assuming $p\neq0$,
+\[
+y=x.
+\]
+
+Choose
+\[
+x=1.
+\]
+
+Then
+\[
+y=1.
+\]
+
+So one eigenvector is
+\[
+v_1=
+\begin{pmatrix}
+1\\
+1
+\end{pmatrix}.
+\]
+
+\subsection{Eigenvector for $\lambda_2=1-p-q$}
+
+Solve
+\[
+(P-\lambda_2 I)v=0.
+\]
+
+That is,
+\[
+\left(P-(1-p-q)I\right)v=0.
+\]
+
+Now
+\[
+P-(1-p-q)I
+=
+\begin{pmatrix}
+1-p & p\\
+q & 1-q
+\end{pmatrix}
+-
+\begin{pmatrix}
+1-p-q & 0\\
+0 & 1-p-q
+\end{pmatrix}.
+\]
+
+Therefore,
+\[
+P-(1-p-q)I
+=
+\begin{pmatrix}
+q & p\\
+q & p
+\end{pmatrix}.
+\]
+
+Now solve
+\[
+\begin{pmatrix}
+q & p\\
+q & p
+\end{pmatrix}
+\begin{pmatrix}
+x\\
+y
+\end{pmatrix}
+=
+\begin{pmatrix}
+0\\
+0
+\end{pmatrix}.
+\]
+
+This gives
+\[
+qx+py=0.
+\]
+
+So
+\[
+py=-qx.
+\]
+
+Hence
+\[
+y=-\frac{q}{p}x.
+\]
+
+Choose
+\[
+x=p.
+\]
+
+Then
+\[
+y=-q.
+\]
+
+So one eigenvector is
+\[
+v_2=
+\begin{pmatrix}
+p\\
+-q
+\end{pmatrix}.
+\]
+
+\section{Step 3: Form the Matrix $R$}
+
+The matrix $R$ is formed by putting the eigenvectors as columns:
+\[
+R=
+\begin{pmatrix}
+| & |\\
+v_1 & v_2\\
+| & |
+\end{pmatrix}.
+\]
+
+So
+\[
+R=
+\begin{pmatrix}
+1 & p\\
+1 & -q
+\end{pmatrix}.
+\]
+
+Then
+\[
+P=RDR^{-1}.
+\]
+
+\section{Step 4: Find $R^{-1}$}
+
+For a $2\times2$ matrix
+\[
+\begin{pmatrix}
+a & b\\
+c & d
+\end{pmatrix},
+\]
+the inverse is
+\[
+\frac{1}{ad-bc}
+\begin{pmatrix}
+d & -b\\
+-c & a
+\end{pmatrix}.
+\]
+
+Here
+\[
+R=
+\begin{pmatrix}
+1 & p\\
+1 & -q
+\end{pmatrix}.
+\]
+
+So
+\[
+a=1,\qquad b=p,\qquad c=1,\qquad d=-q.
+\]
+
+The determinant is
+\[
+ad-bc=(1)(-q)-(p)(1).
+\]
+
+Thus,
+\[
+ad-bc=-q-p=-(p+q).
+\]
+
+Therefore,
+\[
+R^{-1}
+=
+\frac{1}{-(p+q)}
+\begin{pmatrix}
+-q & -p\\
+-1 & 1
+\end{pmatrix}.
+\]
+
+Multiplying the negative sign inside,
+\[
+R^{-1}
+=
+\frac{1}{p+q}
+\begin{pmatrix}
+q & p\\
+1 & -1
+\end{pmatrix}.
+\]
+
+\section{Step 5: Find $P^n$}
+
+Since
+\[
+P=RDR^{-1},
+\]
+we have
+\[
+P^n=RD^nR^{-1}.
+\]
+
+Now
+\[
+D=
+\begin{pmatrix}
+1 & 0\\
+0 & 1-p-q
+\end{pmatrix}.
+\]
+
+Therefore,
+\[
+D^n=
+\begin{pmatrix}
+1^n & 0\\
+0 & (1-p-q)^n
+\end{pmatrix}.
+\]
+
+Since
+\[
+1^n=1,
+\]
+we get
+\[
+D^n=
+\begin{pmatrix}
+1 & 0\\
+0 & (1-p-q)^n
+\end{pmatrix}.
+\]
+
+Thus,
+\[
+P^n=
+\begin{pmatrix}
+1 & p\\
+1 & -q
+\end{pmatrix}
+\begin{pmatrix}
+1 & 0\\
+0 & (1-p-q)^n
+\end{pmatrix}
+\frac{1}{p+q}
+\begin{pmatrix}
+q & p\\
+1 & -1
+\end{pmatrix}.
+\]
+
+\section{Step 6: Multiply to Get the $n$-Step Matrix}
+
+First multiply
+\[
+R D^n.
+\]
+
+\[
+\begin{pmatrix}
+1 & p\\
+1 & -q
+\end{pmatrix}
+\begin{pmatrix}
+1 & 0\\
+0 & (1-p-q)^n
+\end{pmatrix}
+=
+\begin{pmatrix}
+1 & p(1-p-q)^n\\
+1 & -q(1-p-q)^n
+\end{pmatrix}.
+\]
+
+Now multiply by $R^{-1}$:
+\[
+P^n
+=
+\frac{1}{p+q}
+\begin{pmatrix}
+1 & p(1-p-q)^n\\
+1 & -q(1-p-q)^n
+\end{pmatrix}
+\begin{pmatrix}
+q & p\\
+1 & -1
+\end{pmatrix}.
+\]
+
+Compute each entry.
+
+First row, first column:
+\[
+q+p(1-p-q)^n.
+\]
+
+First row, second column:
+\[
+p-p(1-p-q)^n.
+\]
+
+Second row, first column:
+\[
+q-q(1-p-q)^n.
+\]
+
+Second row, second column:
+\[
+p+q(1-p-q)^n.
+\]
+
+Therefore,
+\[
+P^n
+=
+\frac{1}{p+q}
+\begin{pmatrix}
+q+p(1-p-q)^n & p-p(1-p-q)^n\\
+q-q(1-p-q)^n & p+q(1-p-q)^n
+\end{pmatrix}.
+\]
+
+This can also be written as
+\[
+P^n
+=
+\frac{1}{p+q}
+\begin{pmatrix}
+q & p\\
+q & p
+\end{pmatrix}
++
+\frac{(1-p-q)^n}{p+q}
+\begin{pmatrix}
+p & -p\\
+-q & q
+\end{pmatrix}.
+\]
+
+\section{Step 7: Take the Limit}
+
+Assume
+\[
+|1-p-q|<1.
+\]
+
+Then
+\[
+\lim_{n\to\infty}(1-p-q)^n=0.
+\]
+
+So in
+\[
+P^n
+=
+\frac{1}{p+q}
+\begin{pmatrix}
+q & p\\
+q & p
+\end{pmatrix}
++
+\frac{(1-p-q)^n}{p+q}
+\begin{pmatrix}
+p & -p\\
+-q & q
+\end{pmatrix},
+\]
+the second part goes to zero.
+
+Therefore,
+\[
+\lim_{n\to\infty}P^n
+=
+\frac{1}{p+q}
+\begin{pmatrix}
+q & p\\
+q & p
+\end{pmatrix}.
+\]
+
+So
+\[
+\boxed{
+\lim_{n\to\infty}P^n
+=
+\begin{pmatrix}
+\frac{q}{p+q} & \frac{p}{p+q}\\
+\frac{q}{p+q} & \frac{p}{p+q}
+\end{pmatrix}.
+}
+\]
+
+\section{Step 8: Read the Limiting Distribution}
+
+Both rows of the limiting matrix are the same:
+\[
+\left(\frac{q}{p+q},\frac{p}{p+q}\right).
+\]
+
+Therefore the limiting distribution is
+\[
+\boxed{
+\pi=
+\left(\frac{q}{p+q},\frac{p}{p+q}\right).
+}
+\]
+
+Using state order
+\[
+(\text{OFF},\text{ON}),
+\]
+this means
+\[
+\Prob(\text{OFF in long run})=\frac{q}{p+q},
+\]
+and
+\[
+\Prob(\text{ON in long run})=\frac{p}{p+q}.
+\]
+
+\section{Short Summary}
+
+\[
+\begin{array}{c|c}
+\text{Step} & \text{What to do}\\
+\hline
+1 & \text{Find eigenvalues}\\
+2 & \text{Find eigenvectors}\\
+3 & \text{Put eigenvectors into }R\\
+4 & \text{Find }R^{-1}\\
+5 & \text{Use }P^n=RD^nR^{-1}\\
+6 & \text{Take }n\to\infty\\
+7 & \text{Read the repeated row as }\pi
+\end{array}
+\]
+
+\section{Practice Question}
+
+\begin{example}
+Let
+\[
+p=\frac34,
+\qquad
+q=\frac12.
+\]
+Find the limiting distribution of the ON/OFF chain.
+\end{example}
+
+\begin{answer}
+The limiting distribution is
+\[
+\pi=
+\left(\frac{q}{p+q},\frac{p}{p+q}\right).
+\]
+
+Substitute
+\[
+p=\frac34,
+\qquad
+q=\frac12.
+\]
+
+Then
+\[
+p+q=\frac34+\frac12=\frac34+\frac24=\frac54.
+\]
+
+So
+\[
+\pi_0=\frac{q}{p+q}
+=
+\frac{\frac12}{\frac54}
+=
+\frac12\cdot\frac45
+=
+\frac25.
+\]
+
+And
+\[
+\pi_1=\frac{p}{p+q}
+=
+\frac{\frac34}{\frac54}
+=
+\frac34\cdot\frac45
+=
+\frac35.
+\]
+
+Therefore,
+\[
+\boxed{
+\pi=\left(\frac25,\frac35\right).
+}
+\]
+
+This means the long-run probability of OFF is $2/5$, and the long-run probability of ON is $3/5$.
+\end{answer}
+
+\end{document}

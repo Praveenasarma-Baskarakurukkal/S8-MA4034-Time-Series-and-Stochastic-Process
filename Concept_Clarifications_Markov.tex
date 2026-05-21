@@ -1,0 +1,627 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\newtheoremstyle{notestyle}
+  {8pt}
+  {8pt}
+  {\normalfont}
+  {}
+  {\bfseries}
+  {.}
+  {0.5em}
+  {}
+
+\theoremstyle{notestyle}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+
+\newenvironment{answer}
+{\par\textbf{Answer.}\ }
+{\hfill$\square$\par}
+
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+
+\title{\textbf{Concept Clarifications: Markov Chain Calculations}}
+\author{MA4034: Time Series and Stochastic Processes}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Why Does $\lambda^n$ Appear in $P^n$?}
+
+Suppose $P$ is a transition matrix. The $n$-step transition matrix is
+\[
+P^n.
+\]
+
+Directly multiplying
+\[
+P\cdot P\cdot P\cdots P
+\]
+many times is difficult. Eigenvalues help because they turn repeated matrix multiplication into repeated scalar multiplication.
+
+\subsection*{Key Idea}
+
+If
+\[
+Pv=\lambda v,
+\]
+then applying $P$ repeatedly gives
+\[
+P^2v=P(Pv)=P(\lambda v)=\lambda Pv=\lambda^2v.
+\]
+Similarly,
+\[
+P^3v=\lambda^3v.
+\]
+In general,
+\[
+P^nv=\lambda^nv.
+\]
+
+That is why powers of eigenvalues, such as
+\[
+\lambda^n,
+\]
+appear when calculating $P^n$.
+
+\subsection*{Diagonalization}
+
+If a matrix can be diagonalized, then
+\[
+P=RDR^{-1},
+\]
+where $D$ is a diagonal matrix containing the eigenvalues.
+
+Then
+\[
+P^n=(RDR^{-1})^n.
+\]
+
+When we multiply this out,
+\[
+P^n=RD^nR^{-1}.
+\]
+
+This happens because the middle terms cancel:
+\[
+RDR^{-1}RDR^{-1}=RD^2R^{-1}.
+\]
+
+For a diagonal matrix,
+\[
+D=
+\begin{pmatrix}
+\lambda_1 & 0\\
+0 & \lambda_2
+\end{pmatrix},
+\]
+we have
+\[
+D^n=
+\begin{pmatrix}
+\lambda_1^n & 0\\
+0 & \lambda_2^n
+\end{pmatrix}.
+\]
+
+So the powers $\lambda_1^n,\lambda_2^n$ come from raising the diagonal matrix to the $n$th power.
+
+\section{ON/OFF Chain: Meaning of the Limit}
+
+For the ON/OFF chain,
+\[
+P=
+\begin{pmatrix}
+1-p & p\\
+q & 1-q
+\end{pmatrix}.
+\]
+
+Here:
+\begin{itemize}[leftmargin=1.2cm]
+    \item $p$ is the probability of switching from OFF to ON,
+    \item $q$ is the probability of switching from ON to OFF.
+\end{itemize}
+
+The eigenvalues are
+\[
+\lambda_1=1,
+\qquad
+\lambda_2=1-p-q.
+\]
+
+The $n$-step transition matrix can be written as
+\[
+P^n=
+\frac{1}{p+q}
+\begin{pmatrix}
+q & p\\
+q & p
+\end{pmatrix}
++
+\frac{(1-p-q)^n}{p+q}
+\begin{pmatrix}
+p & -p\\
+-q & q
+\end{pmatrix}.
+\]
+
+The important part is
+\[
+(1-p-q)^n.
+\]
+
+If
+\[
+|1-p-q|<1,
+\]
+then
+\[
+\lim_{n\to\infty}(1-p-q)^n=0.
+\]
+
+So the second matrix disappears in the long run:
+\[
+\lim_{n\to\infty}P^n=
+\frac{1}{p+q}
+\begin{pmatrix}
+q & p\\
+q & p
+\end{pmatrix}.
+\]
+
+Therefore,
+\[
+\lim_{n\to\infty}P^n=
+\begin{pmatrix}
+\frac{q}{p+q} & \frac{p}{p+q}\\
+\frac{q}{p+q} & \frac{p}{p+q}
+\end{pmatrix}.
+\]
+
+Both rows are the same. That means that after a long time, the probability of being OFF or ON does not depend on where we started.
+
+\[
+\Prob(\text{OFF in long run})=\frac{q}{p+q},
+\]
+\[
+\Prob(\text{ON in long run})=\frac{p}{p+q}.
+\]
+
+\subsection*{Why is $\Prob(\text{OFF})=\frac{q}{p+q}$?}
+
+This may feel reversed at first. But remember:
+
+\[
+q=\Prob(\text{ON}\to \text{OFF}).
+\]
+
+If $q$ is large, the system leaves ON quickly and goes to OFF often. So the system spends more time OFF.
+
+Similarly,
+
+\[
+p=\Prob(\text{OFF}\to \text{ON}).
+\]
+
+If $p$ is large, the system leaves OFF quickly and goes to ON often. So the system spends more time ON.
+
+\section{Series Criterion: What Do $I_n$, $S$, and $\E_i[S]$ Mean?}
+
+Let
+\[
+I_n=
+\begin{cases}
+1, & X_n=i,\\
+0, & X_n\neq i.
+\end{cases}
+\]
+
+This is an indicator variable.
+
+It means:
+\begin{itemize}[leftmargin=1.2cm]
+    \item $I_n=1$ if the chain is in state $i$ at time $n$,
+    \item $I_n=0$ if the chain is not in state $i$ at time $n$.
+\end{itemize}
+
+Then
+\[
+S=\sum_{n=1}^{\infty}I_n
+\]
+counts how many times the chain returns to state $i$ after time 0.
+
+\subsection*{Why is $\E_i[I_n]=\Prob_i(X_n=i)$?}
+
+For an indicator variable,
+\[
+\E[I_n]=1\cdot \Prob(I_n=1)+0\cdot \Prob(I_n=0).
+\]
+
+So
+\[
+\E[I_n]=\Prob(I_n=1).
+\]
+
+But
+\[
+I_n=1
+\]
+means
+\[
+X_n=i.
+\]
+
+Therefore,
+\[
+\E_i[I_n]=\Prob_i(X_n=i)=p_{ii}^{(n)}.
+\]
+
+Hence,
+\[
+\E_i[S]
+=
+\sum_{n=1}^{\infty}\E_i[I_n]
+=
+\sum_{n=1}^{\infty}p_{ii}^{(n)}.
+\]
+
+\subsection*{Meaning}
+
+\[
+\sum_{n=1}^{\infty}p_{ii}^{(n)}
+\]
+is the expected total number of returns to state $i$.
+
+If this sum is finite, state $i$ is transient.
+
+If this sum is infinite, state $i$ is recurrent.
+
+\section{Ergodic Chain: Why Every Row Becomes $\pi$}
+
+For an ergodic Markov chain,
+\[
+\lim_{n\to\infty}P^n
+\]
+has every row equal to the stationary distribution $\pi$.
+
+This means:
+
+\[
+p_{ij}^{(n)}\to \pi_j.
+\]
+
+The starting state is $i$, and the final state is $j$.
+
+In the long run, the probability of ending in state $j$ becomes $\pi_j$, no matter where we started.
+
+So if
+\[
+\pi=(0.2,0.5,0.3),
+\]
+then
+\[
+\lim_{n\to\infty}P^n
+=
+\begin{pmatrix}
+0.2 & 0.5 & 0.3\\
+0.2 & 0.5 & 0.3\\
+0.2 & 0.5 & 0.3
+\end{pmatrix}.
+\]
+
+Each row is the same because the chain forgets its starting state.
+
+\section{Why $P(S)=P(S,S)+P(S,R)$?}
+
+Suppose the weather can be sunny $(S)$ or rainy $(R)$ on two consecutive days.
+
+The event
+\[
+\text{first day is sunny}
+\]
+can happen in two ways:
+\[
+(S,S)
+\]
+or
+\[
+(S,R).
+\]
+
+These are disjoint events. Therefore,
+\[
+\Prob(S)=\Prob(S,S)+\Prob(S,R).
+\]
+
+For example, if
+\[
+\Prob(S,S)=0.7
+\]
+and
+\[
+\Prob(S,R)=0.1,
+\]
+then
+\[
+\Prob(S)=0.7+0.1=0.8.
+\]
+
+\section{Insurance Example: Why Part (b) and Part (c) Are Different}
+
+The insurance example has three states:
+\[
+H=\text{high risk},\qquad I=\text{intermediate risk},\qquad L=\text{low risk}.
+\]
+
+The question asks:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item[(b)] If a customer starts as low risk, how many years can they expect to stay there?
+    \item[(c)] How many years pass on average between two consecutive visits to the high-risk category?
+\end{itemize}
+
+These are different types of questions.
+
+\subsection{Part (b): How Long Do They Stay in Low Risk?}
+
+This asks about the first time leaving state $L$.
+
+If the customer is in low risk:
+\begin{itemize}[leftmargin=1.2cm]
+    \item with probability $0.8$, they stay low risk,
+    \item with probability $0.2$, they leave low risk.
+\end{itemize}
+
+So the number of years spent in low risk before leaving has a geometric distribution with success probability
+\[
+0.2.
+\]
+
+Here ``success'' means leaving low risk.
+
+Therefore, the expected number of years spent in low risk is
+\[
+\frac{1}{0.2}=5.
+\]
+
+\[
+\boxed{\text{Expected time staying low risk}=5\text{ years}.}
+\]
+
+\subsection{Why Not Use $1/\pi_L$ for Part (b)?}
+
+The value
+\[
+\frac1{\pi_L}
+\]
+means the average time between two visits to low risk in the long run.
+
+But part (b) does not ask:
+
+\[
+\text{How long between visits to low risk?}
+\]
+
+It asks:
+
+\[
+\text{Starting in low risk, how long until we leave low risk?}
+\]
+
+That is a first exit time, not a recurrence time.
+
+So we use
+\[
+\frac1{\Prob(\text{leave }L)}
+=
+\frac1{0.2}
+=5.
+\]
+
+\subsection{Part (c): Time Between Consecutive Visits to High Risk}
+
+Part (c) asks about recurrence time.
+
+It asks:
+
+\[
+\text{High risk}\to \text{leave/move around}\to \text{High risk again}.
+\]
+
+For an ergodic Markov chain, the mean recurrence time of state $i$ is
+\[
+\E_i[\tau_i]=\frac1{\pi_i}.
+\]
+
+So for high risk,
+\[
+\E_H[\tau_H]=\frac1{\pi_H}.
+\]
+
+For the insurance example, the stationary distribution is
+\[
+\pi=\left(\frac5{29},\frac6{29},\frac{18}{29}\right)
+\]
+using state order
+\[
+(H,I,L).
+\]
+
+Therefore,
+\[
+\pi_H=\frac5{29}.
+\]
+
+So
+\[
+\E_H[\tau_H]
+=
+\frac1{\pi_H}
+=
+\frac1{5/29}
+=
+\frac{29}{5}
+=5.8.
+\]
+
+\[
+\boxed{\text{Average time between visits to high risk}=5.8\text{ years}.}
+\]
+
+\subsection{Main Difference}
+
+\[
+\begin{array}{c|c|c}
+\text{Question} & \text{Meaning} & \text{Method}\\
+\hline
+\text{How long stay in }L? & \text{time until leaving }L & 1/\Prob(\text{leave }L)\\
+\text{Time between visits to }H? & \text{return time to }H & 1/\pi_H
+\end{array}
+\]
+
+\section{Practice Questions}
+
+\begin{enumerate}[label=\textbf{Q\arabic*.}, leftmargin=1.2cm]
+    \item For the ON/OFF chain, explain why the term $(1-p-q)^n$ disappears in the limit when $|1-p-q|<1$.
+
+    \item Suppose
+    \[
+    \pi=(0.3,0.7).
+    \]
+    What will $\lim_{n\to\infty}P^n$ look like if the Markov chain is ergodic?
+
+    \item If
+    \[
+    \Prob(S,S)=0.6,\qquad \Prob(S,R)=0.2,
+    \]
+    find $\Prob(S)$.
+
+    \item A Markov chain has state $A$. From $A$, it stays in $A$ with probability $0.75$ and leaves $A$ with probability $0.25$. If the chain starts at $A$, what is the expected time spent in $A$ before leaving?
+
+    \item In an ergodic Markov chain, suppose the stationary probability of state $B$ is
+    \[
+    \pi_B=0.2.
+    \]
+    What is the mean recurrence time of state $B$?
+
+    \item In the insurance example, explain in one sentence why part (b) is not solved using $1/\pi_L$.
+\end{enumerate}
+
+\section{Answers}
+
+\subsection*{Answer 1}
+
+If
+\[
+|1-p-q|<1,
+\]
+then the number
+\[
+1-p-q
+\]
+lies between $-1$ and $1$.
+
+Any number whose absolute value is less than 1 goes to 0 when raised to higher and higher powers.
+
+Therefore,
+\[
+\lim_{n\to\infty}(1-p-q)^n=0.
+\]
+
+So the part of $P^n$ containing $(1-p-q)^n$ disappears in the long run.
+
+\subsection*{Answer 2}
+
+If the chain is ergodic, then every row of the limiting matrix is equal to $\pi$.
+
+Since
+\[
+\pi=(0.3,0.7),
+\]
+we get
+\[
+\lim_{n\to\infty}P^n
+=
+\begin{pmatrix}
+0.3 & 0.7\\
+0.3 & 0.7
+\end{pmatrix}.
+\]
+
+\subsection*{Answer 3}
+
+The event that the first day is sunny can happen as:
+\[
+(S,S)
+\]
+or
+\[
+(S,R).
+\]
+
+Therefore,
+\[
+\Prob(S)=\Prob(S,S)+\Prob(S,R).
+\]
+
+So
+\[
+\Prob(S)=0.6+0.2=0.8.
+\]
+
+\subsection*{Answer 4}
+
+The probability of leaving state $A$ in a given step is
+\[
+0.25.
+\]
+
+The time spent in $A$ before leaving has a geometric distribution with success probability $0.25$.
+
+Therefore, the expected time spent in $A$ is
+\[
+\frac1{0.25}=4.
+\]
+
+\[
+\boxed{4\text{ time steps}.}
+\]
+
+\subsection*{Answer 5}
+
+For an ergodic Markov chain,
+\[
+\E_B[\tau_B]=\frac1{\pi_B}.
+\]
+
+Since
+\[
+\pi_B=0.2,
+\]
+we get
+\[
+\E_B[\tau_B]=\frac1{0.2}=5.
+\]
+
+\[
+\boxed{5\text{ time steps}.}
+\]
+
+\subsection*{Answer 6}
+
+Part (b) asks for the time until leaving low risk, while $1/\pi_L$ gives the average time between repeated visits to low risk in the long run.
+
+\end{document}
