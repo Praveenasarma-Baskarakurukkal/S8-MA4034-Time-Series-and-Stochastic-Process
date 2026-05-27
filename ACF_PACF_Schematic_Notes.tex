@@ -1,0 +1,228 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\newcommand{\schematicpair}[5]{%
+\begin{figure}[htbp]
+\centering
+\begin{subfigure}[t]{0.48\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=5pt,
+    width=\linewidth,
+    height=5.2cm,
+    xmin=0.5,
+    xmax=8.5,
+    ymin=-1.0,
+    ymax=1.0,
+    axis lines=left,
+    xtick={1,2,3,4,5,6,7,8},
+    ytick={-1,-0.5,0,0.5,1},
+    xlabel={Lag},
+    ylabel={Corr.},
+    enlarge x limits=0.08,
+    enlarge y limits=0.12,
+    clip=false
+]
+\addplot[draw=blue!70, fill=blue!40] coordinates {#2};
+\addplot[densely dashed, gray] coordinates {(0.5,0.2) (8.5,0.2)};
+\addplot[densely dashed, gray] coordinates {(0.5,-0.2) (8.5,-0.2)};
+\addplot[black, thick] coordinates {(0.5,0) (8.5,0)};
+\end{axis}
+\end{tikzpicture}
+\caption{ACF}
+\end{subfigure}
+\hfill
+\begin{subfigure}[t]{0.48\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=5pt,
+    width=\linewidth,
+    height=5.2cm,
+    xmin=0.5,
+    xmax=8.5,
+    ymin=-1.0,
+    ymax=1.0,
+    axis lines=left,
+    xtick={1,2,3,4,5,6,7,8},
+    ytick={-1,-0.5,0,0.5,1},
+    xlabel={Lag},
+    ylabel={Corr.},
+    enlarge x limits=0.08,
+    enlarge y limits=0.12,
+    clip=false
+]
+\addplot[draw=red!70, fill=red!40] coordinates {#3};
+\addplot[densely dashed, gray] coordinates {(0.5,0.2) (8.5,0.2)};
+\addplot[densely dashed, gray] coordinates {(0.5,-0.2) (8.5,-0.2)};
+\addplot[black, thick] coordinates {(0.5,0) (8.5,0)};
+\end{axis}
+\end{tikzpicture}
+\caption{PACF}
+\end{subfigure}
+
+\caption{#1}
+\end{figure}
+
+\noindent #4
+
+\medskip
+
+#5
+
+\medskip
+}
+
+\begin{document}
+
+\begin{center}
+{\LARGE \textbf{ACF and PACF Schematic Notes}}\\[4pt]
+{\large Side-by-side illustrations for common time-series models}
+\end{center}
+
+\section*{How to read the plots}
+These figures are schematic, not data-driven. They show the usual textbook patterns used for model identification.
+
+\begin{itemize}
+  \item For a stationary series, the ACF and PACF usually die down reasonably fast.
+  \item For an AR model, the PACF cuts off after lag $p$ while the ACF tails off.
+  \item For an MA model, the ACF cuts off after lag $q$ while the PACF tails off.
+  \item For an ARMA model, both ACF and PACF tail off.
+  \item For an ARIMA model, the original series is typically nonstationary, but the differenced series behaves like an ARMA model.
+\end{itemize}
+
+\section*{1. White noise}
+White noise has no meaningful autocorrelation. Both plots should look like random small spikes around zero.
+
+\schematicpair
+{White noise: both ACF and PACF stay near zero}
+{(1,0.05) (2,-0.04) (3,0.03) (4,-0.02) (5,0.04) (6,-0.03) (7,0.02) (8,-0.01)}
+{(1,0.02) (2,-0.03) (3,0.01) (4,0.04) (5,-0.02) (6,0.03) (7,-0.01) (8,0.02)}
+{Interpretation: no clear cutoff and no trend; almost all spikes stay inside the bounds.}
+{This is the visual pattern of a white-noise series.}
+
+\section*{2. AR models}
+For an AR model, the ACF tails off and the PACF cuts off after the order of the model.
+
+\subsection*{AR(1)}
+\schematicpair
+{AR(1): ACF tails off, PACF cuts off after lag 1}
+{(1,0.70) (2,0.48) (3,0.33) (4,0.23) (5,0.16) (6,0.11) (7,0.08) (8,0.05)}
+{(1,0.72) (2,0.04) (3,-0.03) (4,0.02) (5,-0.02) (6,0.01) (7,-0.01) (8,0.01)}
+{Interpretation: the ACF decays gradually, but the PACF shows one dominant spike at lag 1 and then becomes small.}
+{This is the usual pattern for AR(1).}
+
+\subsection*{AR(2)}
+\schematicpair
+{AR(2): ACF tails off, PACF cuts off after lag 2}
+{(1,0.60) (2,0.42) (3,0.25) (4,0.16) (5,0.10) (6,0.07) (7,0.05) (8,0.03)}
+{(1,0.58) (2,-0.41) (3,0.03) (4,-0.02) (5,0.01) (6,-0.01) (7,0.00) (8,0.01)}
+{Interpretation: the PACF shows significant lags 1 and 2, then becomes small; the ACF dies down gradually.}
+{This is the usual pattern for AR(2).}
+
+\section*{3. MA models}
+For an MA model, the ACF cuts off after the order of the model and the PACF tails off.
+
+\subsection*{MA(1)}
+\schematicpair
+{MA(1): ACF cuts off after lag 1, PACF tails off}
+{(1,0.68) (2,0.02) (3,-0.01) (4,0.01) (5,-0.02) (6,0.00) (7,0.01) (8,-0.01)}
+{(1,0.70) (2,0.35) (3,0.20) (4,0.12) (5,0.08) (6,0.05) (7,0.03) (8,0.02)}
+{Interpretation: the ACF has one large spike at lag 1 and then becomes small; the PACF fades away slowly.}
+{This is the usual pattern for MA(1).}
+
+\subsection*{MA(2)}
+\schematicpair
+{MA(2): ACF cuts off after lag 2, PACF tails off}
+{(1,0.62) (2,0.44) (3,0.03) (4,-0.02) (5,0.01) (6,0.00) (7,0.01) (8,-0.01)}
+{(1,0.60) (2,0.34) (3,0.22) (4,0.15) (5,0.10) (6,0.06) (7,0.03) (8,0.02)}
+{Interpretation: the first two ACF lags are the main ones, and the PACF decays gradually.}
+{This is the usual pattern for MA(2).}
+
+\section*{4. ARMA models with different $p,q$ values}
+For ARMA models, neither the ACF nor the PACF has a clean cutoff. Both tend to tail off.
+
+\subsection*{ARMA(1,1)}
+\schematicpair
+{ARMA(1,1): both ACF and PACF tail off}
+{(1,0.58) (2,0.39) (3,0.26) (4,0.18) (5,0.12) (6,0.08) (7,0.05) (8,0.03)}
+{(1,0.55) (2,0.31) (3,0.18) (4,0.11) (5,0.07) (6,0.04) (7,0.02) (8,0.01)}
+{Interpretation: both plots decay gradually and no sharp cutoff appears.}
+{This is typical of ARMA(1,1).}
+
+\subsection*{ARMA(2,1)}
+\schematicpair
+{ARMA(2,1): both plots tail off with a short-lag structure}
+{(1,0.66) (2,0.47) (3,0.28) (4,0.18) (5,0.12) (6,0.08) (7,0.05) (8,0.03)}
+{(1,0.60) (2,-0.28) (3,0.14) (4,0.08) (5,0.05) (6,0.03) (7,0.02) (8,0.01)}
+{Interpretation: short-lag dependence is visible, but both ACF and PACF still taper off rather than cutting off cleanly.}
+{This is typical of ARMA(2,1).}
+
+\subsection*{ARMA(1,2)}
+\schematicpair
+{ARMA(1,2): both plots tail off with a more flexible short-lag shape}
+{(1,0.63) (2,0.41) (3,0.25) (4,0.16) (5,0.10) (6,0.06) (7,0.04) (8,0.02)}
+{(1,0.58) (2,0.29) (3,-0.15) (4,0.09) (5,0.05) (6,0.03) (7,0.02) (8,0.01)}
+{Interpretation: a mixed short-lag pattern appears, but neither plot has a hard cutoff.}
+{This is typical of ARMA(1,2).}
+
+\section*{5. ARIMA models with different $p,q,d$ values}
+For ARIMA models, the original series is often nonstationary. After differencing $d$ times, the differenced series behaves like an ARMA model.
+
+\subsection*{ARIMA(1,1,0)}
+\schematicpair
+{ARIMA(1,1,0): original series is nonstationary, differenced series looks AR(1)}
+{(1,0.88) (2,0.79) (3,0.70) (4,0.63) (5,0.57) (6,0.51) (7,0.46) (8,0.41)}
+{(1,0.72) (2,0.03) (3,-0.02) (4,0.01) (5,-0.02) (6,0.01) (7,0.00) (8,-0.01)}
+{Interpretation: the original series has a slowly decaying ACF, while the differenced series shows a clear AR(1)-type PACF cutoff.}
+{This is a common ARIMA(1,1,0) pattern.}
+
+\subsection*{ARIMA(0,1,1)}
+\schematicpair
+{ARIMA(0,1,1): original series is nonstationary, differenced series looks MA(1)}
+{(1,0.86) (2,0.78) (3,0.69) (4,0.62) (5,0.56) (6,0.50) (7,0.45) (8,0.40)}
+{(1,0.66) (2,0.02) (3,-0.01) (4,0.01) (5,-0.01) (6,0.00) (7,0.01) (8,-0.01)}
+{Interpretation: the original series is nonstationary, but after first differencing the ACF shows one dominant lag and then fades.}
+{This is a common ARIMA(0,1,1) pattern.}
+
+\subsection*{ARIMA(1,1,1)}
+\schematicpair
+{ARIMA(1,1,1): original series is nonstationary, differenced series looks ARMA(1,1)}
+{(1,0.87) (2,0.78) (3,0.69) (4,0.62) (5,0.56) (6,0.50) (7,0.45) (8,0.40)}
+{(1,0.58) (2,0.30) (3,0.17) (4,0.10) (5,0.06) (6,0.04) (7,0.02) (8,0.01)}
+{Interpretation: the differenced series has short-lag dependence in both plots, but no clear cutoff in either one.}
+{This is a common ARIMA(1,1,1) pattern.}
+
+\subsection*{ARIMA(2,2,1)}
+\schematicpair
+{ARIMA(2,2,1): original series needs second differencing, then looks like ARMA(2,1)}
+{(1,0.93) (2,0.87) (3,0.80) (4,0.74) (5,0.69) (6,0.64) (7,0.59) (8,0.54)}
+{(1,0.61) (2,-0.26) (3,0.13) (4,0.08) (5,0.05) (6,0.03) (7,0.02) (8,0.01)}
+{Interpretation: the raw series is strongly nonstationary, but after two differences the dependence pattern is consistent with an ARMA model.}
+{This is a common ARIMA(2,2,1) pattern.}
+
+\section*{Short summary}
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Model class & ACF pattern & PACF pattern \\
+\midrule
+White noise & no structure & no structure \\
+AR($p$) & tails off & cuts off after $p$ \\
+MA($q$) & cuts off after $q$ & tails off \\
+ARMA($p,q$) & tails off & tails off \\
+ARIMA($p,d,q$) & differenced series follows ARMA($p,q$) & differenced series follows ARMA($p,q$) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

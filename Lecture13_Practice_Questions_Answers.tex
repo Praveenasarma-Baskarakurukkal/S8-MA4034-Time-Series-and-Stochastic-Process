@@ -1,0 +1,730 @@
+\documentclass[12pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{array}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.75em}
+
+\newtheorem{question}{Question}
+\newtheorem*{theory}{Theory to Use}
+\newtheorem*{answer}{Answer}
+
+\title{Lecture 13 Practice Questions and Step-by-Step Answers}
+\author{MA4034 -- Time Series and Stochastic Processes}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{How to Use This File}
+
+Each question first states the theory or formula needed. Then the answer is solved step by step.
+
+\section{General Birth-Death Queue Balance Equations}
+
+\begin{question}
+Consider a birth-death queue with state-dependent arrival and service rates:
+\[
+\lambda_n=3,\qquad n=0,1,2,\ldots
+\]
+and
+\[
+\mu_n=5,\qquad n=1,2,3,\ldots
+\]
+Find \(p_n\) in terms of \(p_0\), and then find \(p_0\).
+\end{question}
+
+\begin{theory}
+For a birth-death process,
+\[
+p_n=
+\left(
+\frac{\lambda_{n-1}\lambda_{n-2}\cdots \lambda_0}
+{\mu_n\mu_{n-1}\cdots \mu_1}
+\right)p_0,
+\qquad n=1,2,\ldots
+\]
+
+If \(\lambda_n=\lambda\) and \(\mu_n=\mu\), then
+\[
+p_n=\rho^n p_0,
+\qquad
+\rho=\frac{\lambda}{\mu}.
+\]
+
+For an infinite queue, the probabilities must sum to 1:
+\[
+\sum_{n=0}^{\infty}p_n=1.
+\]
+\end{theory}
+
+\begin{answer}
+Here,
+\[
+\lambda=3,\qquad \mu=5.
+\]
+
+Therefore,
+\[
+\rho=\frac{\lambda}{\mu}=\frac{3}{5}.
+\]
+
+So
+\[
+p_n=\rho^n p_0
+=\left(\frac{3}{5}\right)^n p_0.
+\]
+
+Now use
+\[
+\sum_{n=0}^{\infty}p_n=1.
+\]
+
+\[
+\sum_{n=0}^{\infty}\left(\frac{3}{5}\right)^n p_0=1.
+\]
+
+\[
+p_0\sum_{n=0}^{\infty}\left(\frac{3}{5}\right)^n=1.
+\]
+
+Using the geometric series formula,
+\[
+\sum_{n=0}^{\infty}r^n=\frac{1}{1-r},\qquad |r|<1,
+\]
+we get
+\[
+p_0\frac{1}{1-\frac{3}{5}}=1.
+\]
+
+\[
+p_0\frac{1}{\frac{2}{5}}=1.
+\]
+
+\[
+p_0\frac{5}{2}=1.
+\]
+
+\[
+p_0=\frac{2}{5}.
+\]
+
+Therefore,
+\[
+\boxed{p_n=\left(\frac{3}{5}\right)^n\frac{2}{5}.}
+\]
+\end{answer}
+
+\section{M/M/1 Infinite Queue}
+
+\begin{question}
+A single-server car wash has arrival rate \(\lambda=4\) cars per hour and service rate \(\mu=6\) cars per hour.
+Find:
+\begin{enumerate}[label=(\alph*)]
+    \item \(\rho\),
+    \item \(p_0\),
+    \item \(p_3\),
+    \item \(L_s\),
+    \item \(L_q\).
+\end{enumerate}
+\end{question}
+
+\begin{theory}
+For an \(M/M/1\) infinite queue:
+\[
+\rho=\frac{\lambda}{\mu}.
+\]
+
+Steady state exists if
+\[
+\rho<1.
+\]
+
+The state probabilities are
+\[
+p_n=(1-\rho)\rho^n,\qquad n=0,1,2,\ldots
+\]
+
+The expected number in the system is
+\[
+L_s=\frac{\rho}{1-\rho}.
+\]
+
+The expected number in the queue is
+\[
+L_q=\frac{\rho^2}{1-\rho}.
+\]
+\end{theory}
+
+\begin{answer}
+\textbf{(a) Utilization}
+\[
+\rho=\frac{\lambda}{\mu}=\frac{4}{6}=\frac{2}{3}.
+\]
+
+\[
+\boxed{\rho=\frac{2}{3}.}
+\]
+
+\textbf{(b) Probability system is empty}
+\[
+p_0=1-\rho=1-\frac{2}{3}=\frac{1}{3}.
+\]
+
+\[
+\boxed{p_0=\frac{1}{3}.}
+\]
+
+\textbf{(c) Probability of 3 cars in the system}
+\[
+p_3=(1-\rho)\rho^3.
+\]
+
+\[
+p_3=\frac{1}{3}\left(\frac{2}{3}\right)^3
+=\frac{1}{3}\cdot \frac{8}{27}
+=\frac{8}{81}.
+\]
+
+\[
+\boxed{p_3=\frac{8}{81}\approx 0.0988.}
+\]
+
+\textbf{(d) Expected number in the system}
+\[
+L_s=\frac{\rho}{1-\rho}
+=\frac{\frac{2}{3}}{1-\frac{2}{3}}
+=\frac{\frac{2}{3}}{\frac{1}{3}}
+=2.
+\]
+
+\[
+\boxed{L_s=2.}
+\]
+
+\textbf{(e) Expected number in the queue}
+\[
+L_q=\frac{\rho^2}{1-\rho}
+=\frac{\left(\frac{2}{3}\right)^2}{\frac{1}{3}}
+=\frac{\frac{4}{9}}{\frac{1}{3}}
+=\frac{4}{3}.
+\]
+
+\[
+\boxed{L_q=\frac{4}{3}.}
+\]
+\end{answer}
+
+\section{Using Little's Formula}
+
+\begin{question}
+For an \(M/M/1\) queue, suppose
+\[
+\lambda=5\text{ customers per hour}
+\]
+and the expected number in the system is
+\[
+L_s=10.
+\]
+Find the expected time a customer spends in the system.
+\end{question}
+
+\begin{theory}
+Little's formula says
+\[
+L_s=\lambda_{\text{eff}}W_s.
+\]
+
+If every arriving customer can join the system, then
+\[
+\lambda_{\text{eff}}=\lambda.
+\]
+
+Therefore,
+\[
+W_s=\frac{L_s}{\lambda_{\text{eff}}}.
+\]
+\end{theory}
+
+\begin{answer}
+Since the queue is not stated to reject customers,
+\[
+\lambda_{\text{eff}}=\lambda=5.
+\]
+
+Using Little's formula,
+\[
+L_s=\lambda_{\text{eff}}W_s.
+\]
+
+Substitute:
+\[
+10=5W_s.
+\]
+
+\[
+W_s=2.
+\]
+
+\[
+\boxed{W_s=2\text{ hours}.}
+\]
+
+Interpretation: On average, a customer spends \(2\) hours in the whole system, including both waiting and service.
+\end{answer}
+
+\section{Finite Capacity Single-Server Queue}
+
+\begin{question}
+A small barbershop has one barber and only \(3\) waiting chairs.
+Including the customer being served, the maximum number in the system is
+\[
+N=4.
+\]
+Customers arrive at rate \(\lambda=4\) per hour and the barber serves at rate \(\mu=4\) per hour.
+Find:
+\begin{enumerate}[label=(\alph*)]
+    \item the steady-state probabilities \(p_0,p_1,p_2,p_3,p_4\),
+    \item the probability that an arriving customer cannot enter,
+    \item the expected number of customers in the system.
+\end{enumerate}
+\end{question}
+
+\begin{theory}
+For an \(M/M/1\) finite queue with maximum system size \(N\),
+\[
+p_n=p_0\rho^n,\qquad n=0,1,\ldots,N,
+\]
+and
+\[
+p_n=0,\qquad n>N.
+\]
+
+If
+\[
+\rho=1,
+\]
+then all finite-state probabilities are equal:
+\[
+p_0=p_1=\cdots=p_N=\frac{1}{N+1}.
+\]
+
+The blocking probability is
+\[
+P(\text{customer cannot enter})=p_N.
+\]
+
+The expected number in the system is
+\[
+L_s=\sum_{n=0}^{N}np_n.
+\]
+\end{theory}
+
+\begin{answer}
+Here,
+\[
+\lambda=4,\qquad \mu=4.
+\]
+
+Therefore,
+\[
+\rho=\frac{\lambda}{\mu}=1.
+\]
+
+Since \(N=4\), the possible states are
+\[
+0,1,2,3,4.
+\]
+
+\textbf{(a) Steady-state probabilities}
+
+Because \(\rho=1\),
+\[
+p_0=p_1=p_2=p_3=p_4=\frac{1}{N+1}.
+\]
+
+\[
+p_0=p_1=p_2=p_3=p_4=\frac{1}{5}.
+\]
+
+\[
+\boxed{p_0=p_1=p_2=p_3=p_4=0.2.}
+\]
+
+\textbf{(b) Probability an arriving customer cannot enter}
+
+A customer cannot enter when the system is full:
+\[
+P(\text{blocked})=p_4.
+\]
+
+\[
+\boxed{P(\text{blocked})=p_4=\frac{1}{5}=0.2.}
+\]
+
+\textbf{(c) Expected number in the system}
+\[
+L_s=\sum_{n=0}^{4}np_n.
+\]
+
+\[
+L_s=0\left(\frac{1}{5}\right)
++1\left(\frac{1}{5}\right)
++2\left(\frac{1}{5}\right)
++3\left(\frac{1}{5}\right)
++4\left(\frac{1}{5}\right).
+\]
+
+\[
+L_s=\frac{0+1+2+3+4}{5}
+=\frac{10}{5}=2.
+\]
+
+\[
+\boxed{L_s=2.}
+\]
+\end{answer}
+
+\section{State-Dependent Service Rate}
+
+\begin{question}
+A grocery store opens checkout counters depending on the number of customers in the store.
+Customers arrive at rate
+\[
+\lambda_n=10\text{ per hour}.
+\]
+Each open counter serves at rate \(5\) customers per hour.
+The number of open counters is:
+\[
+\begin{array}{c|c}
+\text{Number of customers} & \text{Open counters}\\
+\hline
+1\text{ to }3 & 1\\
+4\text{ to }6 & 2\\
+7\text{ or more} & 3
+\end{array}
+\]
+Write \(\mu_n\), the total service rate when there are \(n\) customers.
+\end{question}
+
+\begin{theory}
+In a birth-death queue:
+\[
+\lambda_n=\text{arrival rate when in state }n,
+\]
+\[
+\mu_n=\text{total departure rate when in state }n.
+\]
+
+If each server has service rate \(\mu\), and \(c_n\) servers are active in state \(n\), then
+\[
+\mu_n=c_n\mu.
+\]
+\end{theory}
+
+\begin{answer}
+Each open counter serves at rate
+\[
+5\text{ per hour}.
+\]
+
+If there are \(0\) customers, nobody can depart:
+\[
+\mu_0=0.
+\]
+
+If there are \(1,2,3\) customers, one counter is open:
+\[
+\mu_n=1(5)=5,\qquad n=1,2,3.
+\]
+
+If there are \(4,5,6\) customers, two counters are open:
+\[
+\mu_n=2(5)=10,\qquad n=4,5,6.
+\]
+
+If there are \(7\) or more customers, three counters are open:
+\[
+\mu_n=3(5)=15,\qquad n=7,8,9,\ldots
+\]
+
+Therefore,
+\[
+\boxed{
+\mu_n=
+\begin{cases}
+0, & n=0,\\
+5, & n=1,2,3,\\
+10, & n=4,5,6,\\
+15, & n\ge 7.
+\end{cases}
+}
+\]
+\end{answer}
+
+\section{Kendall Notation}
+
+\begin{question}
+Explain the meaning of the queue notation
+\[
+(M/M/2):(FCFS/5/\infty).
+\]
+\end{question}
+
+\begin{theory}
+Kendall notation is
+\[
+(a/b/c):(d/e/f),
+\]
+where:
+\[
+a=\text{arrival distribution},
+\]
+\[
+b=\text{service-time distribution},
+\]
+\[
+c=\text{number of servers},
+\]
+\[
+d=\text{queue discipline},
+\]
+\[
+e=\text{maximum number allowed in the system},
+\]
+\[
+f=\text{source size}.
+\]
+
+Here \(M\) means Markovian, meaning Poisson arrivals or exponential service times.
+\end{theory}
+
+\begin{answer}
+For
+\[
+(M/M/2):(FCFS/5/\infty),
+\]
+we interpret each part:
+
+\[
+M=\text{Poisson arrival process}.
+\]
+
+\[
+M=\text{exponential service time}.
+\]
+
+\[
+2=\text{two parallel servers}.
+\]
+
+\[
+FCFS=\text{first come, first served}.
+\]
+
+\[
+5=\text{maximum of 5 customers in the system}.
+\]
+
+\[
+\infty=\text{infinite calling population/source}.
+\]
+
+Thus this is a two-server queue with Poisson arrivals, exponential service times, first-come-first-served discipline, maximum system capacity \(5\), and unlimited possible customers in the source population.
+\end{answer}
+
+\section{Multiple-Server Queue Service Rate}
+
+\begin{question}
+An \(M/M/3\) queue has arrival rate \(\lambda=12\) customers per hour.
+Each server serves at rate \(\mu=5\) customers per hour.
+Write the total service rate \(\mu_n\) when there are \(n\) customers in the system.
+\end{question}
+
+\begin{theory}
+For an \(M/M/c\) queue:
+\[
+\mu_n=
+\begin{cases}
+n\mu, & n<c,\\
+c\mu, & n\ge c.
+\end{cases}
+\]
+
+Reason:
+\begin{itemize}
+    \item if \(n<c\), only \(n\) servers are busy,
+    \item if \(n\ge c\), all \(c\) servers are busy.
+\end{itemize}
+\end{theory}
+
+\begin{answer}
+Here,
+\[
+c=3,\qquad \mu=5.
+\]
+
+If \(n=0\), no one is in service:
+\[
+\mu_0=0.
+\]
+
+If \(n=1\), one server is busy:
+\[
+\mu_1=1(5)=5.
+\]
+
+If \(n=2\), two servers are busy:
+\[
+\mu_2=2(5)=10.
+\]
+
+If \(n\ge 3\), all three servers are busy:
+\[
+\mu_n=3(5)=15,\qquad n\ge 3.
+\]
+
+Therefore,
+\[
+\boxed{
+\mu_n=
+\begin{cases}
+0, & n=0,\\
+5, & n=1,\\
+10, & n=2,\\
+15, & n\ge 3.
+\end{cases}
+}
+\]
+\end{answer}
+
+\section{Self-Service Model}
+
+\begin{question}
+In a self-service system, customers arrive at rate \(\lambda=8\) per hour.
+Each customer completes service independently at rate \(\mu=2\) per hour.
+There are infinitely many service positions, so no one waits.
+Find the steady-state distribution \(p_n\).
+\end{question}
+
+\begin{theory}
+For an infinite-server self-service model:
+\[
+\lambda_n=\lambda,
+\]
+and
+\[
+\mu_n=n\mu.
+\]
+
+Then
+\[
+p_n=\frac{\rho^n}{n!}p_0,
+\qquad
+\rho=\frac{\lambda}{\mu}.
+\]
+
+Using
+\[
+\sum_{n=0}^{\infty}p_n=1,
+\]
+we get
+\[
+p_0=e^{-\rho}.
+\]
+
+Therefore,
+\[
+p_n=e^{-\rho}\frac{\rho^n}{n!}.
+\]
+\end{theory}
+
+\begin{answer}
+Here,
+\[
+\lambda=8,\qquad \mu=2.
+\]
+
+So
+\[
+\rho=\frac{\lambda}{\mu}=\frac{8}{2}=4.
+\]
+
+For an infinite-server model,
+\[
+p_n=e^{-\rho}\frac{\rho^n}{n!}.
+\]
+
+Substitute \(\rho=4\):
+\[
+\boxed{p_n=e^{-4}\frac{4^n}{n!},\qquad n=0,1,2,\ldots}
+\]
+
+This is a Poisson distribution with mean \(4\).
+\end{answer}
+
+\section*{Essay-Type Revision Questions}
+
+\begin{question}
+Why is the condition \(\rho<1\) important in an \(M/M/1\) infinite queue?
+\end{question}
+
+\begin{answer}
+For an \(M/M/1\) infinite queue,
+\[
+\rho=\frac{\lambda}{\mu}.
+\]
+
+Here \(\lambda\) is the arrival rate and \(\mu\) is the service rate.
+
+If
+\[
+\rho<1,
+\]
+then
+\[
+\lambda<\mu.
+\]
+
+This means the server can serve customers faster than they arrive on average. The queue can settle into a steady state.
+
+If
+\[
+\rho\ge 1,
+\]
+then arrivals are at least as fast as service. The queue tends to grow without bound, and a steady-state probability distribution does not exist for the infinite queue.
+\end{answer}
+
+\begin{question}
+Explain the difference between \(L_s\) and \(L_q\).
+\end{question}
+
+\begin{answer}
+\[
+L_s=\text{expected number of customers in the whole system}.
+\]
+
+The system includes:
+\[
+\text{queue}+\text{service facility}.
+\]
+
+\[
+L_q=\text{expected number of customers only waiting in the queue}.
+\]
+
+Therefore,
+\[
+L_s-L_q=\text{expected number of customers being served}.
+\]
+
+For a single-server queue, this value is also the probability that the server is busy.
+\end{answer}
+
+\end{document}

@@ -1,0 +1,563 @@
+\documentclass[12pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{array}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.75em}
+
+\newtheorem{question}{Question}
+\newtheorem*{theory}{Theory to Use}
+\newtheorem*{answer}{Answer}
+
+\title{Lecture 12 Practice Questions and Step-by-Step Answers}
+\author{MA4034 -- Time Series and Stochastic Processes}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{How to Use This File}
+
+Each question starts with the theory or equation needed. Then the answer is solved step by step.
+
+\section{Exponential Interarrival Times and Poisson Counts}
+
+\begin{question}
+Cars arrive according to a Poisson process with rate \(6\) cars per hour.
+\begin{enumerate}[label=(\alph*)]
+    \item What is the probability that no cars arrive in the next \(20\) minutes?
+    \item What is the probability that exactly \(3\) cars arrive in the next \(20\) minutes?
+    \item What is the probability that the waiting time until the first car is more than \(20\) minutes?
+\end{enumerate}
+\end{question}
+
+\begin{theory}
+If \(N(t)\) is the number of arrivals in time \(t\), then
+\[
+N(t)\sim \operatorname{Poisson}(\lambda t),
+\]
+so
+\[
+P(N(t)=n)=e^{-\lambda t}\frac{(\lambda t)^n}{n!}.
+\]
+
+If \(T_1\) is the waiting time until the first arrival, then
+\[
+T_1\sim \operatorname{Exponential}(\lambda),
+\]
+and
+\[
+P(T_1>t)=e^{-\lambda t}.
+\]
+\end{theory}
+
+\begin{answer}
+The rate is
+\[
+\lambda=6 \text{ cars per hour}.
+\]
+
+The time interval is \(20\) minutes:
+\[
+t=\frac{20}{60}=\frac{1}{3}\text{ hour}.
+\]
+
+Therefore,
+\[
+\lambda t=6\cdot \frac{1}{3}=2.
+\]
+
+\textbf{(a) No cars arrive}
+\[
+P(N(t)=0)=e^{-2}\frac{2^0}{0!}=e^{-2}.
+\]
+
+\[
+\boxed{P(N(t)=0)=e^{-2}\approx 0.1353.}
+\]
+
+\textbf{(b) Exactly 3 cars arrive}
+\[
+P(N(t)=3)=e^{-2}\frac{2^3}{3!}.
+\]
+
+\[
+=e^{-2}\frac{8}{6}
+=\frac{4}{3}e^{-2}.
+\]
+
+\[
+\boxed{P(N(t)=3)=\frac{4}{3}e^{-2}\approx 0.1804.}
+\]
+
+\textbf{(c) Waiting time until first car is more than 20 minutes}
+
+This means no car arrives during the first \(20\) minutes:
+\[
+P(T_1>t)=e^{-\lambda t}=e^{-2}.
+\]
+
+\[
+\boxed{P(T_1>20\text{ minutes})=e^{-2}\approx 0.1353.}
+\]
+
+Notice that part (a) and part (c) have the same answer because
+\[
+\{T_1>t\}=\{N(t)=0\}.
+\]
+\end{answer}
+
+\section{Arrival Time of the \(n\)th Event}
+
+\begin{question}
+Buses arrive according to a Poisson process with rate \(4\) buses per hour.
+Let \(S_3\) be the time of the third bus.
+Find
+\[
+P(S_3>1).
+\]
+\end{question}
+
+\begin{theory}
+\[
+S_n=\text{time of the }n\text{th event}.
+\]
+
+The event \(S_n>t\) means that by time \(t\), fewer than \(n\) events have occurred:
+\[
+\{S_n>t\}=\{N(t)<n\}.
+\]
+
+Therefore,
+\[
+P(S_n>t)=P(N(t)<n)
+=\sum_{j=0}^{n-1}e^{-\lambda t}\frac{(\lambda t)^j}{j!}.
+\]
+\end{theory}
+
+\begin{answer}
+Here,
+\[
+\lambda=4,\qquad t=1,\qquad n=3.
+\]
+
+We need
+\[
+P(S_3>1)=P(N(1)<3).
+\]
+
+That means
+\[
+N(1)=0,1,\text{ or }2.
+\]
+
+Since
+\[
+N(1)\sim \operatorname{Poisson}(4),
+\]
+we get
+\[
+P(S_3>1)=P(N(1)=0)+P(N(1)=1)+P(N(1)=2).
+\]
+
+\[
+=e^{-4}\frac{4^0}{0!}
++e^{-4}\frac{4^1}{1!}
++e^{-4}\frac{4^2}{2!}.
+\]
+
+\[
+=e^{-4}\left(1+4+8\right).
+\]
+
+\[
+\boxed{P(S_3>1)=13e^{-4}\approx 0.2381.}
+\]
+
+Interpretation: There is about a \(23.81\%\) chance that the third bus has not arrived within one hour.
+\end{answer}
+
+\section{Thinning a Poisson Process}
+
+\begin{question}
+Customers arrive at a shop according to a Poisson process with rate \(12\) customers per hour.
+Each customer buys a drink with probability \(0.25\), independently of other customers.
+\begin{enumerate}[label=(\alph*)]
+    \item What is the rate of drink-buying customers?
+    \item What is the probability that exactly \(2\) drink-buying customers arrive in the next \(30\) minutes?
+    \item What is the probability that no drink-buying customers arrive in the next \(30\) minutes?
+\end{enumerate}
+\end{question}
+
+\begin{theory}
+Thinning means keeping each event independently with probability \(p\).
+
+If the original process has rate \(\lambda\), then the thinned process has rate
+\[
+\lambda p.
+\]
+\end{theory}
+
+\begin{answer}
+Original arrival rate:
+\[
+\lambda=12.
+\]
+
+Probability a customer buys a drink:
+\[
+p=0.25.
+\]
+
+\textbf{(a) Thinned rate}
+\[
+\lambda p=12(0.25)=3.
+\]
+
+\[
+\boxed{\text{Drink-buying customers arrive at rate }3\text{ per hour}.}
+\]
+
+\textbf{(b) Exactly 2 drink-buying customers in 30 minutes}
+
+The time interval is
+\[
+t=\frac{30}{60}=\frac{1}{2}\text{ hour}.
+\]
+
+For drink-buying customers,
+\[
+\lambda t=3\cdot \frac{1}{2}=1.5.
+\]
+
+Thus
+\[
+N(t)\sim \operatorname{Poisson}(1.5).
+\]
+
+\[
+P(N(t)=2)=e^{-1.5}\frac{1.5^2}{2!}.
+\]
+
+\[
+=e^{-1.5}\frac{2.25}{2}
+=1.125e^{-1.5}.
+\]
+
+\[
+\boxed{P(N(t)=2)=1.125e^{-1.5}\approx 0.2510.}
+\]
+
+\textbf{(c) No drink-buying customers}
+\[
+P(N(t)=0)=e^{-1.5}.
+\]
+
+\[
+\boxed{P(N(t)=0)=e^{-1.5}\approx 0.2231.}
+\]
+\end{answer}
+
+\section{Superposition of Poisson Processes}
+
+\begin{question}
+Northbound cars pass a point according to a Poisson process with rate \(3\) cars per minute.
+Southbound cars pass according to an independent Poisson process with rate \(2\) cars per minute.
+\begin{enumerate}[label=(\alph*)]
+    \item What is the distribution of the total number of cars passing in one minute?
+    \item What is the probability that exactly \(4\) cars pass in one minute?
+    \item Given that exactly \(4\) cars pass in one minute, what is the probability that exactly \(3\) are northbound?
+\end{enumerate}
+\end{question}
+
+\begin{theory}
+Superposition means adding independent Poisson processes.
+
+If
+\[
+N_1(t)\sim \operatorname{Poisson}(\lambda_1 t)
+\]
+and
+\[
+N_2(t)\sim \operatorname{Poisson}(\lambda_2 t),
+\]
+then
+\[
+N_1(t)+N_2(t)\sim \operatorname{Poisson}((\lambda_1+\lambda_2)t).
+\]
+
+Also, conditional on the total number of events, the number from one source is binomial:
+\[
+N_1\mid (N_1+N_2=n)\sim \operatorname{Binomial}\left(n,\frac{\lambda_1}{\lambda_1+\lambda_2}\right).
+\]
+\end{theory}
+
+\begin{answer}
+\textbf{(a) Total number of cars}
+
+The total rate is
+\[
+\lambda_1+\lambda_2=3+2=5.
+\]
+
+For one minute,
+\[
+N\sim \operatorname{Poisson}(5).
+\]
+
+\[
+\boxed{N\sim \operatorname{Poisson}(5).}
+\]
+
+\textbf{(b) Exactly 4 cars}
+\[
+P(N=4)=e^{-5}\frac{5^4}{4!}.
+\]
+
+\[
+=e^{-5}\frac{625}{24}.
+\]
+
+\[
+\boxed{P(N=4)=e^{-5}\frac{625}{24}\approx 0.1755.}
+\]
+
+\textbf{(c) Given 4 cars, exactly 3 are northbound}
+
+Given total \(4\), the probability that a car is northbound is
+\[
+\frac{3}{3+2}=\frac{3}{5}.
+\]
+
+So
+\[
+X\mid N=4\sim \operatorname{Binomial}\left(4,\frac{3}{5}\right).
+\]
+
+\[
+P(X=3)=\binom{4}{3}\left(\frac{3}{5}\right)^3\left(\frac{2}{5}\right)^1.
+\]
+
+\[
+=4\cdot \frac{27}{125}\cdot \frac{2}{5}
+=\frac{216}{625}.
+\]
+
+\[
+\boxed{P(X=3\mid N=4)=\frac{216}{625}=0.3456.}
+\]
+\end{answer}
+
+\section{Memoryless Property of the Exponential Distribution}
+
+\begin{question}
+The lifetime of a machine is exponential with mean \(5\) hours.
+Suppose the machine has already worked for \(3\) hours.
+What is the probability that it works for at least \(2\) more hours?
+\end{question}
+
+\begin{theory}
+If
+\[
+T\sim \operatorname{Exponential}(\lambda),
+\]
+then
+\[
+P(T>s+t\mid T>s)=P(T>t).
+\]
+
+This is the memoryless property.
+
+If the mean is \(5\), then
+\[
+\lambda=\frac{1}{5}.
+\]
+\end{theory}
+
+\begin{answer}
+We want
+\[
+P(T>3+2\mid T>3).
+\]
+
+By the memoryless property,
+\[
+P(T>5\mid T>3)=P(T>2).
+\]
+
+Since
+\[
+\lambda=\frac{1}{5},
+\]
+we get
+\[
+P(T>2)=e^{-\lambda\cdot 2}
+=e^{-\frac{1}{5}\cdot 2}
+=e^{-2/5}.
+\]
+
+\[
+\boxed{P(T>5\mid T>3)=e^{-2/5}\approx 0.6703.}
+\]
+
+Interpretation: Once the machine has survived until now, the exponential model treats it like a fresh machine with respect to future waiting time.
+\end{answer}
+
+\section{Pure Birth Model}
+
+\begin{question}
+Customers arrive at a service counter according to a pure birth process with rate \(\lambda=4\) per hour.
+Find the probability that exactly \(3\) customers arrive in \(30\) minutes.
+\end{question}
+
+\begin{theory}
+In a pure birth process with constant birth rate \(\lambda\), the number of arrivals in time \(t\) has a Poisson distribution:
+\[
+p_n(t)=P(N(t)=n)=e^{-\lambda t}\frac{(\lambda t)^n}{n!}.
+\]
+\end{theory}
+
+\begin{answer}
+Here,
+\[
+\lambda=4,\qquad t=\frac{30}{60}=\frac{1}{2}.
+\]
+
+So
+\[
+\lambda t=4\cdot \frac{1}{2}=2.
+\]
+
+We need
+\[
+P(N(t)=3)=e^{-2}\frac{2^3}{3!}.
+\]
+
+\[
+=e^{-2}\frac{8}{6}
+=\frac{4}{3}e^{-2}.
+\]
+
+\[
+\boxed{P(N(t)=3)=\frac{4}{3}e^{-2}\approx 0.1804.}
+\]
+\end{answer}
+
+\section{Pure Death Model}
+
+\begin{question}
+A system starts with \(N=5\) identical components. Each component has an exponential lifetime with death rate \(\mu=0.2\) per hour.
+Find the probability that exactly \(3\) components remain after \(4\) hours.
+\end{question}
+
+\begin{theory}
+For a pure death model starting with \(N\) individuals, the number of deaths by time \(t\) follows a binomial form.
+
+Each individual survives time \(t\) with probability
+\[
+e^{-\mu t}.
+\]
+
+Each individual dies by time \(t\) with probability
+\[
+1-e^{-\mu t}.
+\]
+
+Therefore, the probability that exactly \(n\) individuals remain is
+\[
+P(X(t)=n)=\binom{N}{n}\left(e^{-\mu t}\right)^n
+\left(1-e^{-\mu t}\right)^{N-n}.
+\]
+\end{theory}
+
+\begin{answer}
+Here,
+\[
+N=5,\qquad n=3,\qquad \mu=0.2,\qquad t=4.
+\]
+
+The survival probability of one component is
+\[
+e^{-\mu t}=e^{-0.2(4)}=e^{-0.8}.
+\]
+
+The death probability of one component is
+\[
+1-e^{-0.8}.
+\]
+
+Thus
+\[
+P(X(4)=3)
+=\binom{5}{3}(e^{-0.8})^3(1-e^{-0.8})^2.
+\]
+
+\[
+\boxed{P(X(4)=3)=10e^{-2.4}(1-e^{-0.8})^2.}
+\]
+
+Numerically,
+\[
+\boxed{P(X(4)=3)\approx 0.3387.}
+\]
+\end{answer}
+
+\section*{Essay-Type Revision Questions}
+
+\begin{question}
+Explain the difference between the exponential distribution and the Poisson distribution in the context of arrivals.
+\end{question}
+
+\begin{answer}
+The exponential distribution describes waiting time.
+
+For example, if customers arrive randomly, the exponential distribution can describe the time until the next customer arrives:
+\[
+T\sim \operatorname{Exponential}(\lambda).
+\]
+
+The Poisson distribution describes the number of arrivals in a fixed time interval:
+\[
+N(t)\sim \operatorname{Poisson}(\lambda t).
+\]
+
+So:
+\[
+\text{Exponential} \quad \longrightarrow \quad \text{time between events},
+\]
+\[
+\text{Poisson} \quad \longrightarrow \quad \text{number of events in a time interval}.
+\]
+\end{answer}
+
+\begin{question}
+Explain why \(P(S_n>t)=P(N(t)<n)\).
+\end{question}
+
+\begin{answer}
+\(S_n\) is the time at which the \(n\)th event occurs.
+
+The event
+\[
+S_n>t
+\]
+means that the \(n\)th event has not occurred by time \(t\).
+
+If the \(n\)th event has not occurred by time \(t\), then the number of events by time \(t\) must be less than \(n\):
+\[
+N(t)<n.
+\]
+
+Therefore,
+\[
+\boxed{P(S_n>t)=P(N(t)<n).}
+\]
+\end{answer}
+
+\end{document}

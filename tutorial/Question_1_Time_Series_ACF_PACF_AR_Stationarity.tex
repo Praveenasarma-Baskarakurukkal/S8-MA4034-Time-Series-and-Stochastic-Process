@@ -1,0 +1,739 @@
+\documentclass[12pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage{array}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.7em}
+
+\newtheorem*{remark}{Remark}
+
+\begin{document}
+
+\begin{center}
+    {\Large \textbf{Tutorial: Time Series Question 1}}\\
+    \vspace{0.2cm}
+    {\large ACF, PACF, AR Variance, and Stationarity}
+\end{center}
+
+\section*{How to Use This Tutorial}
+
+This file explains one big question step by step.  Before each part, the relevant
+theory is stated first.  The aim is not only to answer this exact question, but
+also to show the method you can reuse for similar exam questions.
+
+\section*{Question 1(a): ACF of an MA(1)-Type Process}
+
+\subsection*{Theory to Use}
+
+The autocovariance function is
+\[
+\gamma_k = \operatorname{Cov}(Y_t,Y_{t-k}).
+\]
+
+The autocorrelation function is
+\[
+\rho_k = \frac{\gamma_k}{\gamma_0}.
+\]
+
+For a moving average process of order 1,
+\[
+Y_t = e_t + \psi e_{t-1},
+\]
+where \(e_t\) is white noise with variance \(\sigma_e^2\), the autocovariances are
+\[
+\gamma_0 = (1+\psi^2)\sigma_e^2,
+\]
+\[
+\gamma_1 = \psi \sigma_e^2,
+\]
+and
+\[
+\gamma_k=0,\qquad |k|\geq 2.
+\]
+
+So the ACF is
+\[
+\rho_1 = \frac{\psi}{1+\psi^2},
+\]
+and
+\[
+\rho_k=0,\qquad |k|\geq 2.
+\]
+
+\subsection*{Question}
+
+Consider the model
+\[
+Y_t = e_t - \frac{1}{\theta}e_{t-1},
+\]
+where
+\[
+e_t \sim WN(0,\theta^2\sigma^2).
+\]
+Obtain the ACF of \(Y_t\).
+
+\subsection*{Answer}
+
+Compare the given model with the standard MA(1) form:
+\[
+Y_t = e_t + \psi e_{t-1}.
+\]
+
+Here,
+\[
+\psi = -\frac{1}{\theta}.
+\]
+
+Also,
+\[
+\operatorname{Var}(e_t)=\theta^2\sigma^2.
+\]
+
+Therefore,
+\[
+\gamma_0
+=
+\left(1+\psi^2\right)\operatorname{Var}(e_t).
+\]
+
+Substitute \(\psi=-1/\theta\):
+\[
+\gamma_0
+=
+\left(1+\frac{1}{\theta^2}\right)\theta^2\sigma^2.
+\]
+
+Simplifying,
+\[
+\gamma_0
+=
+(\theta^2+1)\sigma^2.
+\]
+
+Now find \(\gamma_1\):
+\[
+\gamma_1
+=
+\psi \operatorname{Var}(e_t).
+\]
+
+Thus,
+\[
+\gamma_1
+=
+\left(-\frac{1}{\theta}\right)\theta^2\sigma^2
+=
+-\theta\sigma^2.
+\]
+
+For an MA(1) process,
+\[
+\gamma_k=0,\qquad |k|\geq 2.
+\]
+
+Therefore,
+\[
+\rho_1
+=
+\frac{\gamma_1}{\gamma_0}
+=
+\frac{-\theta\sigma^2}{(\theta^2+1)\sigma^2}.
+\]
+
+So
+\[
+\boxed{\rho_1=-\frac{\theta}{\theta^2+1}}.
+\]
+
+Also,
+\[
+\boxed{\rho_0=1},
+\]
+and
+\[
+\boxed{\rho_k=0,\qquad |k|\geq 2}.
+\]
+
+Therefore, the ACF is
+\[
+\boxed{
+\rho_k =
+\begin{cases}
+1, & k=0,\\[4pt]
+-\dfrac{\theta}{\theta^2+1}, & |k|=1,\\[8pt]
+0, & |k|\geq 2.
+\end{cases}
+}
+\]
+
+\subsection*{Simple Interpretation}
+
+The process only contains \(e_t\) and \(e_{t-1}\).  So \(Y_t\) can only overlap
+with \(Y_{t-1}\).  After lag 1, there is no shared white-noise term, so the ACF
+becomes zero.
+
+\section*{Question 1(b): Derive Lag 2 PACF}
+
+\subsection*{Theory to Use}
+
+The partial autocorrelation at lag 2 measures the direct relationship between
+\(Y_t\) and \(Y_{t-2}\), after removing the effect of \(Y_{t-1}\).
+
+To derive lag 2 PACF, use the Yule-Walker equations for an AR(2) approximation:
+\[
+Y_t = \phi_{21}Y_{t-1}+\phi_{22}Y_{t-2}+a_t.
+\]
+
+The Yule-Walker equations in terms of autocorrelations are
+\[
+\rho_1 = \phi_{21} + \phi_{22}\rho_1,
+\]
+\[
+\rho_2 = \phi_{21}\rho_1 + \phi_{22}.
+\]
+
+The lag 2 PACF is
+\[
+\phi_{22}.
+\]
+
+\subsection*{Question}
+
+Derive the lag 2 PACF for a time series.
+
+\subsection*{Answer}
+
+Start with the Yule-Walker equations:
+\[
+\rho_1 = \phi_{21} + \phi_{22}\rho_1.
+\]
+
+Rearrange this to find \(\phi_{21}\):
+\[
+\phi_{21}
+=
+\rho_1-\phi_{22}\rho_1
+=
+\rho_1(1-\phi_{22}).
+\]
+
+Now use the second equation:
+\[
+\rho_2 = \phi_{21}\rho_1 + \phi_{22}.
+\]
+
+Substitute
+\[
+\phi_{21}=\rho_1(1-\phi_{22}).
+\]
+
+Then
+\[
+\rho_2
+=
+\rho_1(1-\phi_{22})\rho_1+\phi_{22}.
+\]
+
+So
+\[
+\rho_2
+=
+\rho_1^2(1-\phi_{22})+\phi_{22}.
+\]
+
+Expand:
+\[
+\rho_2
+=
+\rho_1^2-\rho_1^2\phi_{22}+\phi_{22}.
+\]
+
+Group the \(\phi_{22}\) terms:
+\[
+\rho_2-\rho_1^2
+=
+\phi_{22}(1-\rho_1^2).
+\]
+
+Therefore,
+\[
+\boxed{
+\phi_{22}
+=
+\frac{\rho_2-\rho_1^2}{1-\rho_1^2}
+}.
+\]
+
+This is the lag 2 PACF.
+
+\subsection*{Simple Interpretation}
+
+The ACF at lag 2, \(\rho_2\), includes both direct and indirect effects.  The
+indirect effect can pass through lag 1.  The PACF removes that lag 1 pathway and
+keeps only the direct lag 2 effect.
+
+\section*{Question 1(c): Variance of an AR(2) Process}
+
+\subsection*{Theory to Use}
+
+Consider the AR(2) model
+\[
+Y_t = \phi_0+\phi_1Y_{t-1}+\phi_2Y_{t-2}+e_t,
+\]
+where
+\[
+e_t \sim WN(0,\sigma_e^2).
+\]
+
+If the process is stationary, the mean is constant:
+\[
+\mu = E(Y_t).
+\]
+
+Taking expectation:
+\[
+\mu=\phi_0+\phi_1\mu+\phi_2\mu.
+\]
+
+Thus,
+\[
+\mu = \frac{\phi_0}{1-\phi_1-\phi_2}.
+\]
+
+The intercept \(\phi_0\) affects the mean, but it does not affect the variance.
+
+For a stationary AR(2), the variance is
+\[
+\gamma_0 = \operatorname{Var}(Y_t).
+\]
+
+The Yule-Walker equations are
+\[
+\gamma_1 = \phi_1\gamma_0+\phi_2\gamma_1,
+\]
+and
+\[
+\gamma_0 = \phi_1\gamma_1+\phi_2\gamma_2+\sigma_e^2.
+\]
+
+Also,
+\[
+\gamma_2 = \phi_1\gamma_1+\phi_2\gamma_0.
+\]
+
+\subsection*{Question}
+
+Suppose
+\[
+Y_t = \phi_0+\phi_1Y_{t-1}+\phi_2Y_{t-2}+e_t.
+\]
+Find \(V(Y_t)\).
+
+\subsection*{Answer}
+
+Let
+\[
+\gamma_0 = V(Y_t).
+\]
+
+From the first Yule-Walker equation,
+\[
+\gamma_1 = \phi_1\gamma_0+\phi_2\gamma_1.
+\]
+
+Move the \(\phi_2\gamma_1\) term to the left:
+\[
+\gamma_1-\phi_2\gamma_1=\phi_1\gamma_0.
+\]
+
+So
+\[
+\gamma_1(1-\phi_2)=\phi_1\gamma_0.
+\]
+
+Hence,
+\[
+\gamma_1=\frac{\phi_1}{1-\phi_2}\gamma_0.
+\]
+
+Now use
+\[
+\gamma_0=\phi_1\gamma_1+\phi_2\gamma_2+\sigma_e^2.
+\]
+
+Also,
+\[
+\gamma_2=\phi_1\gamma_1+\phi_2\gamma_0.
+\]
+
+Substitute \(\gamma_2\) into the equation for \(\gamma_0\):
+\[
+\gamma_0
+=
+\phi_1\gamma_1+\phi_2(\phi_1\gamma_1+\phi_2\gamma_0)+\sigma_e^2.
+\]
+
+Expand:
+\[
+\gamma_0
+=
+\phi_1\gamma_1+\phi_1\phi_2\gamma_1+\phi_2^2\gamma_0+\sigma_e^2.
+\]
+
+Group the first two terms:
+\[
+\gamma_0
+=
+\phi_1(1+\phi_2)\gamma_1+\phi_2^2\gamma_0+\sigma_e^2.
+\]
+
+Substitute
+\[
+\gamma_1=\frac{\phi_1}{1-\phi_2}\gamma_0.
+\]
+
+Then
+\[
+\gamma_0
+=
+\phi_1(1+\phi_2)
+\left(\frac{\phi_1}{1-\phi_2}\gamma_0\right)
++\phi_2^2\gamma_0+\sigma_e^2.
+\]
+
+So
+\[
+\gamma_0
+=
+\frac{\phi_1^2(1+\phi_2)}{1-\phi_2}\gamma_0
++\phi_2^2\gamma_0+\sigma_e^2.
+\]
+
+Move the \(\gamma_0\) terms to the left:
+\[
+\gamma_0
+\left[
+1-\phi_2^2-\frac{\phi_1^2(1+\phi_2)}{1-\phi_2}
+\right]
+=
+\sigma_e^2.
+\]
+
+Therefore,
+\[
+\gamma_0
+=
+\frac{\sigma_e^2}{
+1-\phi_2^2-\dfrac{\phi_1^2(1+\phi_2)}{1-\phi_2}
+}.
+\]
+
+This can be simplified to
+\[
+\boxed{
+V(Y_t)
+=
+\gamma_0
+=
+\frac{\sigma_e^2(1-\phi_2)}
+{(1+\phi_2)\left((1-\phi_2)^2-\phi_1^2\right)}
+}.
+\]
+
+Equivalently,
+\[
+\boxed{
+V(Y_t)
+=
+\frac{\sigma_e^2(1-\phi_2)}
+{(1+\phi_2)(1-\phi_2-\phi_1)(1-\phi_2+\phi_1)}
+}.
+\]
+
+\begin{remark}
+This formula is valid when the AR(2) process is stationary.  If the process is
+not stationary, a finite constant variance may not exist.
+\end{remark}
+
+\subsection*{Simple Interpretation}
+
+The intercept \(\phi_0\) shifts the process up or down.  It changes the mean.
+But variance measures spread around the mean, so \(\phi_0\) does not appear in
+the final variance formula.
+
+\section*{Question 1(d): Stationarity from the Characteristic Polynomial}
+
+\subsection*{Theory to Use}
+
+For an AR model, stationarity is checked using the characteristic polynomial.
+The usual rule is:
+
+\[
+\boxed{\text{The AR model is stationary if all roots of the characteristic polynomial lie outside the unit circle.}}
+\]
+
+That means every root \(x\) must satisfy
+\[
+|x|>1.
+\]
+
+If any root satisfies
+\[
+|x|\leq 1,
+\]
+then the model is not stationary.
+
+\subsection*{Question}
+
+An AR model has characteristic polynomial
+\[
+(1+0.2x+0.7x^2)(1-0.8x^{12}).
+\]
+
+Is the model stationary?
+
+\subsection*{Answer}
+
+We need to check the roots of both factors:
+\[
+1+0.2x+0.7x^2
+\]
+and
+\[
+1-0.8x^{12}.
+\]
+
+\subsubsection*{First Factor}
+
+The first factor is
+\[
+1+0.2x+0.7x^2=0.
+\]
+
+Rearrange:
+\[
+0.7x^2+0.2x+1=0.
+\]
+
+For a quadratic
+\[
+ax^2+bx+c=0,
+\]
+if the roots are complex conjugates, the product of the roots is
+\[
+\frac{c}{a}.
+\]
+
+Here,
+\[
+a=0.7,\qquad c=1.
+\]
+
+So the product of the two roots is
+\[
+\frac{1}{0.7}.
+\]
+
+Because the roots are complex conjugates, they have the same modulus.  If each
+root has modulus \(r\), then
+\[
+r^2=\frac{1}{0.7}.
+\]
+
+Thus,
+\[
+r=\sqrt{\frac{1}{0.7}}.
+\]
+
+Since
+\[
+\sqrt{\frac{1}{0.7}}>1,
+\]
+the roots of the first factor lie outside the unit circle.
+
+\subsubsection*{Second Factor}
+
+The second factor is
+\[
+1-0.8x^{12}=0.
+\]
+
+Then
+\[
+0.8x^{12}=1.
+\]
+
+So
+\[
+x^{12}=\frac{1}{0.8}=1.25.
+\]
+
+Therefore, all roots have modulus
+\[
+|x|=(1.25)^{1/12}.
+\]
+
+Since
+\[
+1.25>1,
+\]
+we have
+\[
+(1.25)^{1/12}>1.
+\]
+
+So the roots of the second factor also lie outside the unit circle.
+
+\subsubsection*{Conclusion}
+
+All roots of
+\[
+(1+0.2x+0.7x^2)(1-0.8x^{12})
+\]
+lie outside the unit circle.
+
+Therefore,
+\[
+\boxed{\text{the AR model is stationary.}}
+\]
+
+\subsection*{Simple Interpretation}
+
+Stationarity means shocks die out over time instead of growing.  The root test
+checks whether the AR feedback is weak enough for the process to settle around a
+constant mean and variance.  Since every root is outside the unit circle, the
+model is stable and stationary.
+
+\section*{Extra Practice Questions}
+
+\subsection*{Practice 1: ACF of an MA(1)}
+
+\textbf{Question.} Suppose
+\[
+Y_t=e_t+0.6e_{t-1},
+\]
+where
+\[
+e_t\sim WN(0,4).
+\]
+Find the ACF.
+
+\textbf{Answer.}
+
+Here,
+\[
+\psi=0.6,\qquad \sigma_e^2=4.
+\]
+
+For an MA(1),
+\[
+\gamma_0=(1+\psi^2)\sigma_e^2.
+\]
+
+Thus,
+\[
+\gamma_0=(1+0.6^2)(4)=1.36(4)=5.44.
+\]
+
+Also,
+\[
+\gamma_1=\psi\sigma_e^2=0.6(4)=2.4.
+\]
+
+So
+\[
+\rho_1=\frac{\gamma_1}{\gamma_0}
+=
+\frac{2.4}{5.44}
+=
+0.4412.
+\]
+
+Therefore,
+\[
+\boxed{
+\rho_k=
+\begin{cases}
+1, & k=0,\\
+0.4412, & |k|=1,\\
+0, & |k|\geq 2.
+\end{cases}
+}
+\]
+
+\subsection*{Practice 2: Lag 2 PACF}
+
+\textbf{Question.} If
+\[
+\rho_1=0.5,\qquad \rho_2=0.2,
+\]
+find the lag 2 PACF.
+
+\textbf{Answer.}
+
+Use
+\[
+\phi_{22}=\frac{\rho_2-\rho_1^2}{1-\rho_1^2}.
+\]
+
+Substitute:
+\[
+\phi_{22}
+=
+\frac{0.2-(0.5)^2}{1-(0.5)^2}.
+\]
+
+So
+\[
+\phi_{22}
+=
+\frac{0.2-0.25}{1-0.25}
+=
+\frac{-0.05}{0.75}.
+\]
+
+Therefore,
+\[
+\boxed{\phi_{22}=-0.0667}.
+\]
+
+\subsection*{Practice 3: Stationarity Check}
+
+\textbf{Question.} An AR model has characteristic polynomial
+\[
+1-1.2x.
+\]
+Is the model stationary?
+
+\textbf{Answer.}
+
+Set the characteristic polynomial equal to zero:
+\[
+1-1.2x=0.
+\]
+
+Then
+\[
+1.2x=1.
+\]
+
+So
+\[
+x=\frac{1}{1.2}=0.8333.
+\]
+
+Since
+\[
+|x|<1,
+\]
+the root is inside the unit circle.
+
+Therefore,
+\[
+\boxed{\text{the model is not stationary.}}
+\]
+
+\end{document}

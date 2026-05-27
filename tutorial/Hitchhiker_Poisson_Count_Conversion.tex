@@ -1,0 +1,438 @@
+\documentclass[12pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.7em}
+
+\begin{document}
+
+\begin{center}
+    {\Large \textbf{Tutorial: Hitchhiker Problem}}\\
+    \vspace{0.2cm}
+    {\large Converting Arrival Time Questions into Poisson Count Questions}
+\end{center}
+
+\section*{Question}
+
+Cars arrive at a rate of 10 per hour. Each car picks up a hitchhiker with probability
+\[
+\frac{1}{10}.
+\]
+You are second in line. What is the probability that you wait for more than 2 hours?
+
+\section*{Main Confusing Step}
+
+The step we want to understand is
+\[
+P(S_2>2)=P(N(2)<2).
+\]
+
+This file explains why that conversion is true.
+
+\section*{Theory 1: Poisson Thinning}
+
+Suppose cars arrive according to a Poisson process with rate
+\[
+\lambda = 10 \text{ cars per hour}.
+\]
+
+But not every car is useful to the hitchhiker. A car is useful only if it picks up a
+hitchhiker.
+
+Each car picks up a hitchhiker with probability
+\[
+p=\frac{1}{10}.
+\]
+
+By the thinning property of a Poisson process, the useful cars also form a Poisson
+process, with rate
+\[
+\lambda_{\text{useful}} = \lambda p.
+\]
+
+Therefore,
+\[
+\lambda_{\text{useful}}
+=
+10\left(\frac{1}{10}\right)
+=
+1.
+\]
+
+So useful cars arrive at rate
+\[
+\boxed{1 \text{ useful car per hour}.}
+\]
+
+\section*{Theory 2: Meaning of \(N(t)\)}
+
+Let
+\[
+N(t)=\text{number of useful cars that arrive by time }t.
+\]
+
+Since useful cars arrive according to a Poisson process with rate 1 per hour,
+\[
+N(t)\sim \text{Poisson}(t).
+\]
+
+For example:
+\[
+N(2)=\text{number of useful cars that arrive in the first 2 hours}.
+\]
+
+Because the rate is 1 per hour, the mean number of useful cars in 2 hours is
+\[
+1\times 2=2.
+\]
+
+So
+\[
+\boxed{N(2)\sim \text{Poisson}(2).}
+\]
+
+\section*{Theory 3: Meaning of \(S_2\)}
+
+Let
+\[
+S_2=\text{time at which the second useful car arrives}.
+\]
+
+Since you are second in line, you need the second useful car.
+
+\begin{itemize}
+    \item The first useful car picks up the person in front of you.
+    \item The second useful car picks you up.
+\end{itemize}
+
+So your waiting time is
+\[
+S_2.
+\]
+
+The question asks:
+\[
+P(S_2>2).
+\]
+
+This means:
+
+\[
+\text{Probability that the second useful car arrives after 2 hours.}
+\]
+
+\section*{Why \(P(S_2>2)=P(N(2)<2)\)}
+
+The event
+\[
+S_2>2
+\]
+means:
+
+\[
+\text{The second useful car has not arrived by time 2.}
+\]
+
+If the second useful car has not arrived by time 2, then by time 2 there could be:
+\[
+0 \text{ useful cars}
+\]
+or
+\[
+1 \text{ useful car}.
+\]
+
+But there cannot be 2 or more useful cars by time 2.
+
+So
+\[
+S_2>2
+\]
+is exactly the same event as
+\[
+N(2)<2.
+\]
+
+Therefore,
+\[
+\boxed{P(S_2>2)=P(N(2)<2).}
+\]
+
+\section*{Timeline Interpretation}
+
+Think of a time line from 0 to 2 hours.
+
+\[
+\text{0 hours} \qquad \rule{6cm}{0.4pt} \qquad \text{2 hours}
+\]
+
+If by the end of this interval fewer than 2 useful cars arrived, then you are still
+waiting after 2 hours.
+
+That is why the problem changes from an arrival-time question into a count question.
+
+\section*{Step-by-Step Calculation}
+
+We already found that
+\[
+N(2)\sim \text{Poisson}(2).
+\]
+
+We need
+\[
+P(S_2>2).
+\]
+
+Convert it:
+\[
+P(S_2>2)=P(N(2)<2).
+\]
+
+The condition \(N(2)<2\) means
+\[
+N(2)=0 \quad \text{or} \quad N(2)=1.
+\]
+
+Therefore,
+\[
+P(N(2)<2)
+=
+P(N(2)=0)+P(N(2)=1).
+\]
+
+Use the Poisson formula:
+\[
+P(N=k)=e^{-\mu}\frac{\mu^k}{k!}.
+\]
+
+Here,
+\[
+\mu=2.
+\]
+
+So
+\[
+P(N(2)=0)
+=
+e^{-2}\frac{2^0}{0!}
+=
+e^{-2}.
+\]
+
+Also,
+\[
+P(N(2)=1)
+=
+e^{-2}\frac{2^1}{1!}
+=
+2e^{-2}.
+\]
+
+Therefore,
+\[
+P(S_2>2)
+=
+e^{-2}+2e^{-2}.
+\]
+
+Hence,
+\[
+\boxed{P(S_2>2)=3e^{-2}.}
+\]
+
+\section*{Final Answer}
+
+\[
+\boxed{P(\text{you wait more than 2 hours})=3e^{-2}.}
+\]
+
+Numerically,
+\[
+3e^{-2}\approx 0.406.
+\]
+
+So there is about a
+\[
+\boxed{40.6\%}
+\]
+chance that you wait more than 2 hours.
+
+\section*{General Method}
+
+For a Poisson process:
+
+\[
+S_n = \text{time of the }n\text{th event},
+\]
+and
+\[
+N(t)=\text{number of events by time }t.
+\]
+
+Then
+\[
+\boxed{S_n>t \iff N(t)<n.}
+\]
+
+Therefore,
+\[
+\boxed{P(S_n>t)=P(N(t)<n).}
+\]
+
+This becomes
+\[
+\boxed{
+P(S_n>t)
+=
+\sum_{k=0}^{n-1} e^{-\lambda t}\frac{(\lambda t)^k}{k!}.
+}
+\]
+
+\section*{Practice Question 1}
+
+\textbf{Question.} Useful buses arrive according to a Poisson process with rate 3 per
+hour. A student needs the third useful bus. What is the probability that the student
+waits more than 1 hour?
+
+\subsection*{Answer}
+
+Let
+\[
+S_3=\text{arrival time of the third useful bus}.
+\]
+
+The question asks:
+\[
+P(S_3>1).
+\]
+
+Convert to a count:
+\[
+P(S_3>1)=P(N(1)<3).
+\]
+
+Since the rate is 3 per hour,
+\[
+N(1)\sim \text{Poisson}(3).
+\]
+
+Thus,
+\[
+P(N(1)<3)=P(N(1)=0)+P(N(1)=1)+P(N(1)=2).
+\]
+
+So
+\[
+P(S_3>1)
+=
+e^{-3}\frac{3^0}{0!}
++e^{-3}\frac{3^1}{1!}
++e^{-3}\frac{3^2}{2!}.
+\]
+
+Therefore,
+\[
+P(S_3>1)
+=
+e^{-3}\left(1+3+\frac{9}{2}\right).
+\]
+
+Hence,
+\[
+\boxed{P(S_3>1)=8.5e^{-3}.}
+\]
+
+\section*{Practice Question 2}
+
+\textbf{Question.} Customers arrive according to a Poisson process with rate 5 per hour.
+What is the probability that the fourth customer arrives within 30 minutes?
+
+\subsection*{Answer}
+
+Let
+\[
+S_4=\text{arrival time of the fourth customer}.
+\]
+
+We want
+\[
+P(S_4\leq 0.5).
+\]
+
+The event
+\[
+S_4\leq 0.5
+\]
+means the fourth customer has arrived by 0.5 hours.
+
+So by 0.5 hours, there must be at least 4 customers:
+\[
+P(S_4\leq 0.5)=P(N(0.5)\geq 4).
+\]
+
+Since the rate is 5 per hour,
+\[
+N(0.5)\sim \text{Poisson}(5\times 0.5)=\text{Poisson}(2.5).
+\]
+
+Therefore,
+\[
+P(S_4\leq 0.5)=P(N(0.5)\geq 4).
+\]
+
+Use the complement:
+\[
+P(N(0.5)\geq 4)=1-P(N(0.5)\leq 3).
+\]
+
+So
+\[
+P(S_4\leq 0.5)
+=
+1-\sum_{k=0}^{3}e^{-2.5}\frac{2.5^k}{k!}.
+\]
+
+Thus,
+\[
+\boxed{
+P(S_4\leq 0.5)
+=
+1-\left[
+e^{-2.5}
++e^{-2.5}\frac{2.5}{1!}
++e^{-2.5}\frac{2.5^2}{2!}
++e^{-2.5}\frac{2.5^3}{3!}
+\right].
+}
+\]
+
+\section*{Key Exam Shortcut}
+
+Use these conversions:
+
+\[
+\boxed{S_n>t \iff N(t)<n}
+\]
+
+\[
+\boxed{S_n\leq t \iff N(t)\geq n}
+\]
+
+So:
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Arrival-time statement} & \textbf{Poisson-count statement}\\
+\hline
+\(n\)th event happens after time \(t\) & fewer than \(n\) events by time \(t\)\\
+\hline
+\(n\)th event happens by time \(t\) & at least \(n\) events by time \(t\)\\
+\hline
+\end{tabular}
+\end{center}
+
+\end{document}

@@ -1,0 +1,682 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+
+\begin{document}
+
+\begin{center}
+{\LARGE \textbf{ARIMA Study Notes}}\\[4pt]
+{\large Arranged in the same step-by-step style as the notes provided}
+\end{center}
+
+\section*{1. Questions on ARIMA}
+Yes --- for studying and modeling, we convert an ARIMA series into an ARMA series by differencing.
+
+Meaning:
+\[
+Y_t \sim ARIMA(p,d,q)
+\]
+means:
+\[
+\nabla^d Y_t \sim ARMA(p,q).
+\]
+So we do not permanently change the model name. We say:
+
+\begin{quote}
+The original series $(Y_t)$ is ARIMA, but after differencing $d$ times, the new series becomes ARMA.
+\end{quote}
+
+\subsection*{Example 1: ARIMA(0,1,1)}
+Question:
+\[
+Y_t = Y_{t-1} + e_t - 0.5e_{t-1}
+\]
+
+Answer:
+Move $Y_{t-1}$ to the left:
+\[
+Y_t - Y_{t-1} = e_t - 0.5e_{t-1}.
+\]
+But:
+\[
+Y_t - Y_{t-1} = \nabla Y_t.
+\]
+So:
+\[
+\nabla Y_t = e_t - 0.5e_{t-1}.
+\]
+Now define:
+\[
+W_t = \nabla Y_t.
+\]
+Then:
+\[
+W_t = e_t - 0.5e_{t-1}.
+\]
+This is MA(1). So:
+\[
+W_t \sim ARMA(0,1).
+\]
+Therefore the original series is:
+\[
+\boxed{Y_t \sim ARIMA(0,1,1)}
+\]
+because after one difference, it becomes MA(1).
+
+\subsection*{Example 2: ARIMA(1,1,0)}
+Question:
+\[
+Y_t - Y_{t-1} = 0.6(Y_{t-1} - Y_{t-2}) + e_t
+\]
+
+Answer:
+The left side is:
+\[
+\nabla Y_t.
+\]
+The bracket is:
+\[
+Y_{t-1} - Y_{t-2} = \nabla Y_{t-1}.
+\]
+So:
+\[
+\nabla Y_t = 0.6\nabla Y_{t-1} + e_t.
+\]
+Define:
+\[
+W_t = \nabla Y_t.
+\]
+Then:
+\[
+W_t = 0.6W_{t-1} + e_t.
+\]
+This is AR(1). So:
+\[
+W_t \sim ARMA(1,0).
+\]
+Therefore:
+\[
+\boxed{Y_t \sim ARIMA(1,1,0)}
+\]
+
+\subsection*{Simple rule}
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Original model & After differencing \\
+\midrule
+$Y_t \sim ARIMA(0,1,1)$ & $\nabla Y_t \sim MA(1)$ \\
+$Y_t \sim ARIMA(1,1,0)$ & $\nabla Y_t \sim AR(1)$ \\
+$Y_t \sim ARIMA(1,1,1)$ & $\nabla Y_t \sim ARMA(1,1)$ \\
+$Y_t \sim ARIMA(2,2,1)$ & $\nabla^2 Y_t \sim ARMA(2,1)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Exam sentence to remember}
+An ARIMA model becomes an ARMA model after differencing the series $d$ times:
+\[
+\boxed{ARIMA(p,d,q) \xrightarrow{\text{difference } d \text{ times}} ARMA(p,q)}
+\]
+
+\section*{2. 2016 past papers}
+Overall view from the question:
+
+From Table 2.1:
+\[
+AR(1)=0.4675
+\]
+\[
+C=-0.15566
+\]
+
+Differencing:
+\[
+\text{1 regular difference}
+\]
+
+So:
+\[
+d=1
+\]
+
+The model is fitted to the first difference:
+\[
+W_t = Y_t - Y_{t-1}
+\]
+
+\subsection*{(i) What is your interpretation based on Fig. 2.1 and Fig. 2.2?}
+Fig. 2.1 shows the original time series. It has a clear trend/decrease over time, so the original series does not look stationary.
+
+Fig. 2.2 shows the ACF of the original series. The ACF decreases slowly and remains significant for many lags. This also suggests nonstationarity.
+
+Therefore, the original series should be differenced.
+
+\[
+\boxed{\text{Original series is nonstationary. First differencing is needed.}}
+\]
+
+Exam wording:
+
+From Fig. 2.1, the series shows a downward trend, so the mean is not constant. Fig. 2.2 shows a slowly decaying ACF, which supports nonstationarity. Therefore, one regular difference is appropriate.
+
+\subsection*{(ii) Write down the fitted model}
+Table 2.1 says:
+\[
+AR(1)=0.4675
+\]
+\[
+C=-0.15566
+\]
+and:
+\[
+\text{Differencing: 1 regular difference}
+\]
+
+So the fitted model is AR(1) for the first difference.
+
+Let:
+\[
+W_t = Y_t - Y_{t-1}
+\]
+Then:
+\[
+W_t = C + \phi W_{t-1} + e_t
+\]
+Substitute values:
+\[
+\boxed{W_t = -0.15566 + 0.4675W_{t-1} + e_t}
+\]
+
+Since:
+\[
+W_t = Y_t - Y_{t-1}
+\]
+and:
+\[
+W_{t-1} = Y_{t-1} - Y_{t-2}
+\]
+we can write:
+\[
+\boxed{Y_t - Y_{t-1} = -0.15566 + 0.4675(Y_{t-1} - Y_{t-2}) + e_t}
+\]
+
+Therefore, the original series is:
+\[
+\boxed{ARIMA(1,1,0)}
+\]
+because:
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Term & Value & Reason \\
+\midrule
+$p$ & 1 & AR(1) appears in the fitted model \\
+$d$ & 1 & 1 regular difference \\
+$q$ & 0 & no MA term appears \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{(iii) What is your view on the model selected based on Fig. 2.3 and Fig. 2.4?}
+Fig. 2.3 and Fig. 2.4 are the ACF and PACF of the first-differenced series.
+
+After first differencing, the autocorrelations are much smaller and most spikes are within the bounds. This means the first-differenced series looks stationary.
+
+The PACF/ACF show mainly short-lag dependence, and the fitted output selects AR(1).
+
+So:
+\[
+\boxed{\text{The selected AR(1) model for the first-differenced series is reasonable.}}
+\]
+
+Exam wording:
+
+Fig. 2.3 and Fig. 2.4 show that after first differencing, the series has no strong long-lasting autocorrelation. The remaining dependence is mainly at the first lag. Hence an AR(1) model for the differenced series is reasonable.
+
+Important: We do not say $p=1$ only because one bar is significant. We say it because the first difference is stationary, the short-lag dependence suggests a simple AR model, and Table 2.1 fitted AR(1).
+
+\subsection*{(iv) How do you justify the fitted model?}
+Use three things from Table 2.1 and Table 2.3.
+
+\textbf{1. AR(1) coefficient is significant}
+
+Table 2.1 gives:
+\[
+AR(1)=0.4675
+\]
+p-value:
+\[
+0.003
+\]
+Since:
+\[
+0.003<0.05
+\]
+the AR(1) coefficient is significant.
+
+So AR(1) is useful.
+
+\textbf{2. Constant is significant}
+
+The constant has p-value:
+\[
+0.044
+\]
+Since:
+\[
+0.044<0.05
+\]
+the constant is also significant at 5\%.
+
+\textbf{3. Ljung-Box p-values are large}
+
+The Ljung-Box p-values are:
+\[
+0.927,\ 0.928,\ 0.988
+\]
+These are all greater than 0.05.
+
+For Ljung-Box:
+\[
+H_0: \text{residuals are uncorrelated / white noise}
+\]
+\[
+H_1: \text{residuals are autocorrelated}
+\]
+
+Since p-values are greater than 0.05, we fail to reject $H_0$.
+
+So residuals have no serious autocorrelation.
+
+\textbf{4. A-D residual normality test is acceptable}
+
+Table 2.3 gives A-D test p-value:
+\[
+0.120
+\]
+Since:
+\[
+0.120>0.05
+\]
+we do not reject normality of residuals.
+
+Mean of errors:
+\[
+0.0007
+\]
+This is close to zero.
+
+Final answer for (iv):
+
+\[
+\boxed{\text{The model is justified because AR(1) is significant and residual diagnostics are acceptable.}}
+\]
+
+Exam wording:
+
+The fitted AR(1) coefficient is significant since its p-value is 0.003. The constant is also significant with p-value 0.044. The Ljung-Box p-values are all greater than 0.05, so the residuals do not show significant autocorrelation. The A-D test p-value is 0.120, so residual normality is not rejected. Therefore, the fitted ARIMA(1,1,0) model is adequate.
+
+\subsection*{(v) Recommend or not recommend the model for prediction?}
+Yes, the model can be recommended for prediction.
+
+Reasons:
+\begin{enumerate}
+  \item Original series is nonstationary, and first differencing is appropriate.
+  \item The fitted AR(1) coefficient is significant.
+  \item Residual autocorrelation is not significant.
+  \item Residuals are approximately normal.
+  \item Forecast table gives forecast values and intervals for validation years.
+\end{enumerate}
+
+Table 2.2 gives forecasts:
+
+\begin{center}
+\begin{tabular}{@{}lr@{}}
+\toprule
+Year & Forecast \\
+\midrule
+2013 & 14.7620 \\
+2014 & 13.7713 \\
+2015 & 12.8478 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+So the model is usable for forecasting.
+
+\section*{3. 2019 question}
+This question has many plots, but each plot has a job.
+
+The question asks you to interpret:
+\begin{enumerate}
+  \item Figure 8.1: ACF/PACF of original series
+  \item Table 8.1: ADF test for original series
+  \item Table 8.2: ADF test for first difference
+  \item Figure 8.2: ACF/PACF of first difference
+  \item Table 8.3: fitted model output
+  \item Figure 8.3: residual ACF
+  \item fitted model and one-step forecast
+\end{enumerate}
+
+The paper shows these outputs on pages 6--8 of the 2019 July paper.
+
+\subsection*{Big idea of the question}
+You are trying to decide:
+\[
+\text{What ARIMA model should we use?}
+\]
+
+The process is:
+\[
+\text{Original series} \rightarrow \text{Check stationarity} \rightarrow \text{Difference if needed} \rightarrow \text{Fit AR/MA model} \rightarrow \text{Check residuals}
+\]
+
+\subsection*{(a) Interpret Figure 8.1}
+Figure 8.1 is the ACF and PACF of the observed/original series.
+
+In the table, the ACF values are high and decrease slowly:
+\[
+0.761,\ 0.686,\ 0.596,\ 0.524,\ 0.488,\ldots
+\]
+That means the original series has strong memory.
+
+The ACF does not drop quickly to zero.
+
+So we say:
+\[
+\boxed{\text{The original series is nonstationary.}}
+\]
+
+Why? Because in a stationary series, the ACF usually dies down reasonably quickly. In a nonstationary series, the ACF often remains large for many lags. Your notes also say that nonstationarity is often indicated when the sample ACF fails to die out rapidly.
+
+Exam answer:
+
+Figure 8.1 shows that the ACF of the original series decreases slowly and remains significant for several lags. This indicates that the original series is nonstationary and differencing is required.
+
+\subsection*{(b) Interpret Table 8.1}
+Table 8.1 is the ADF test for the original series.
+
+It gives:
+\[
+p\text{-value}=0.5077
+\]
+
+ADF test hypotheses:
+\[
+H_0: \text{ series has unit root / nonstationary}
+\]
+\[
+H_1: \text{ series is stationary}
+\]
+
+Decision rule:
+
+\begin{center}
+\begin{tabular}{@{}rl@{}}
+\toprule
+p-value & Decision \\
+\midrule
+$p<0.05$ & reject $H_0$, stationary \\
+$p>0.05$ & fail to reject $H_0$, nonstationary \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Here:
+\[
+0.5077>0.05
+\]
+So we fail to reject nonstationarity.
+
+Exam answer:
+
+Since the ADF p-value for the original series is 0.5077, which is greater than 0.05, we fail to reject the null hypothesis of a unit root. Therefore, the original series is nonstationary.
+
+\subsection*{(c) Interpret Table 8.2}
+Table 8.2 is the ADF test for the first difference series.
+
+It gives:
+\[
+p\text{-value}=0.0000
+\]
+
+Again:
+\[
+H_0: \text{ nonstationary}
+\]
+\[
+H_1: \text{ stationary}
+\]
+
+Since:
+\[
+0.0000<0.05
+\]
+we reject $H_0$.
+
+So the first difference is stationary.
+
+That means:
+\[
+\nabla Y_t = Y_t - Y_{t-1}
+\]
+is stationary.
+
+Therefore:
+\[
+d=1
+\]
+
+Exam answer:
+
+Since the ADF p-value for the first difference series is 0.0000, which is less than 0.05, we reject the unit-root hypothesis. Hence the first-differenced series is stationary. Therefore one regular difference is sufficient, so $d=1$.
+
+\subsection*{(d) Interpret Figure 8.2}
+Figure 8.2 is the ACF and PACF of the first difference series.
+
+Now we are not looking at $Y_t$.
+We are looking at:
+\[
+\nabla Y_t
+\]
+or:
+\[
+W_t = Y_t - Y_{t-1}
+\]
+
+In Figure 8.2, the first lag in the ACF and PACF is important. The output then fits an AR(1) model in Table 8.3. So the intended conclusion is:
+\[
+W_t \text{ can be modeled as AR(1)}
+\]
+That means:
+\[
+\nabla Y_t \sim AR(1)
+\]
+So the original series is:
+\[
+\boxed{ARIMA(1,1,0)}
+\]
+
+Why AR(1)?
+
+Because after differencing, the model output uses AR(1). The fitted model table gives AR(1), not MA(1). So we take:
+\[
+p=1,\quad d=1,\quad q=0
+\]
+
+Exam answer:
+
+Figure 8.2 is based on the first-differenced series. Since the differenced series is stationary and the dependence is mainly at lag 1, an AR(1) model is suitable for the differenced series. Therefore the original series may be modeled as ARIMA(1,1,0).
+
+\subsection*{(e) Interpret Table 8.3}
+Table 8.3 gives the fitted model:
+\[
+C=33.02743
+\]
+\[
+AR(1)=-0.480843
+\]
+
+The p-value for AR(1) is:
+\[
+0.0035
+\]
+Since:
+\[
+0.0035<0.05
+\]
+AR(1) is significant.
+
+The p-value for constant is:
+\[
+0.1293
+\]
+This is greater than 0.05, so the constant is not significant. But the important part is the AR(1) term.
+
+Exam answer:
+
+Table 8.3 shows that the AR(1) coefficient is $-0.480843$ with p-value 0.0035. Since this is less than 0.05, the AR(1) term is significant. Therefore an AR(1) model for the first difference series is supported.
+
+\subsection*{(f) Interpret Figure 8.3}
+Figure 8.3 is the ACF of residuals.
+
+Residuals mean:
+\[
+\text{actual value} - \text{fitted value}
+\]
+
+After fitting a model, residuals should behave like white noise.
+
+White noise means:
+\begin{itemize}
+  \item no pattern
+  \item no autocorrelation
+  \item ACF bars mostly inside bounds
+  \item Ljung-Box p-values mostly greater than 0.05
+\end{itemize}
+
+In Figure 8.3, the residual autocorrelations are small, and the p-values shown are mostly greater than 0.05.
+
+So the model is acceptable.
+
+Exam answer:
+
+Figure 8.3 shows that the residual autocorrelations are mostly insignificant and the Ljung-Box probabilities are greater than 0.05. Hence there is no strong evidence of remaining autocorrelation. The residuals behave approximately like white noise, so the fitted model is adequate.
+
+\subsection*{(g) Write fitted model using $B$ operator}
+We decided:
+\[
+Y_t \sim ARIMA(1,1,0)
+\]
+
+The fitted model for the first difference is:
+\[
+W_t = C + \phi W_{t-1} + e_t
+\]
+
+where:
+\[
+W_t = \nabla Y_t = (1-B)Y_t
+\]
+
+From Table 8.3:
+\[
+C=33.02743
+\]
+\[
+\phi=-0.480843
+\]
+
+So:
+\[
+W_t = 33.02743 - 0.480843W_{t-1} + e_t
+\]
+
+In $B$-operator form:
+\[
+(1-\phi B)W_t = C + e_t
+\]
+
+Since $\phi=-0.480843$:
+\[
+1-\phi B = 1 - (-0.480843)B = 1 + 0.480843B
+\]
+
+and:
+\[
+W_t=(1-B)Y_t
+\]
+
+So:
+\[
+\boxed{(1+0.480843B)(1-B)Y_t = 33.02743 + e_t}
+\]
+
+That is the fitted model using the $B$ operator.
+
+\subsection*{(h) One-period-ahead forecast expression}
+The fitted model is:
+\[
+W_t = 33.02743 - 0.480843W_{t-1} + e_t
+\]
+
+For one-step forecast:
+\[
+\hat{W}_{t+1}=33.02743-0.480843W_t
+\]
+
+because future error forecast is zero:
+\[
+E(e_{t+1})=0
+\]
+
+But:
+\[
+W_{t+1}=Y_{t+1}-Y_t
+\]
+
+So:
+\[
+\hat{Y}_{t+1}=Y_t+33.02743-0.480843(Y_t-Y_{t-1})
+\]
+
+That is the one-period-ahead forecast.
+
+\subsection*{(i) Recommend model?}
+Yes, the model can be recommended.
+
+Why?
+\begin{itemize}
+  \item Original series is nonstationary.
+  \item First difference is stationary.
+  \item AR(1) term is significant.
+  \item Residual ACF shows no serious remaining autocorrelation.
+  \item Residual Ljung-Box p-values are mostly greater than 0.05.
+\end{itemize}
+
+Exam answer:
+
+Yes, the fitted ARIMA(1,1,0) model is recommended. The original series is nonstationary, but the first difference is stationary. The fitted AR(1) term is significant, and the residual ACF indicates no serious remaining autocorrelation. Therefore the model appears adequate for forecasting.
+
+\section*{Final short answer}
+You can write this in the exam:
+
+Figure 8.1 shows a slowly decaying ACF for the original series, indicating nonstationarity. Table 8.1 confirms this because the ADF p-value is 0.5077 ($>0.05$), so we fail to reject the unit-root hypothesis. Table 8.2 shows that the first difference is stationary because the ADF p-value is 0.0000 ($<0.05$). Therefore $d=1$. Figure 8.2 and Table 8.3 support an AR(1) model for the first-differenced series. Hence the fitted model is ARIMA(1,1,0). The AR(1) coefficient is significant, and the residual ACF in Figure 8.3 shows no serious remaining autocorrelation. Therefore the model is adequate.
+
+Model:
+\[
+\boxed{(1+0.480843B)(1-B)Y_t = 33.02743 + e_t}
+\]
+
+Forecast:
+\[
+\boxed{\hat{Y}_{t+1}=Y_t+33.02743-0.480843(Y_t-Y_{t-1})}
+\]
+
+\vfill
+\noindent\textit{Notes arranged from the text you provided, keeping the same step order and exam-style wording.}
+
+\end{document}
